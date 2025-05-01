@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from api.helper import LoggingMiddleware
-from api.routers.ocr_card import ocr
 from asgi_correlation_id import CorrelationIdMiddleware
 from common.logs import get_logger
 from common.logs import setup_logging
+from DATN_PhamDangDong.src.logic_app.api.routers.height_cal_pred import ocr
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # from api.routers.sign_up import sign_up_endpoint

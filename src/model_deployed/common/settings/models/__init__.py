@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from .box_detector import BoxDetectorSettings
-from .text_detector import TextDetectorSettings
+from .height_calculator import HeightCalculatorSettings
+from .height_predictor import HeightPredictorSettings
+from .pose_detector import PoseDetectorSettings
 
-__all__ = ['BoxDetectorSettings', 'TextDetectorSettings']
+__all__ = ['BoxDetectorSettings', 'HeightPredictorSettings', 'PoseDetectorSettings', 'HeightCalculatorSettings']

@@ -5,8 +5,8 @@ import unittest
 import cv2
 from common.utils import get_settings
 from fastapi.encoders import jsonable_encoder
-from infrastructure.text_detector import TextDetector
-from infrastructure.text_detector import TextDetectorInput
+from infrastructure.pose_detector import TextDetector
+from infrastructure.pose_detector import TextDetectorInput
 
 
 class TestTextDetector(unittest.TestCase):
