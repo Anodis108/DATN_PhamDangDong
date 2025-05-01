@@ -1,0 +1,8 @@
+numpy
+opencv-python-headless
+PyQt5
+PyQtWebEngine
+torch==2.5.1
+torchaudio==2.5.1
+torchvision==0.20.1
+ultralytics==8.3.98
