@@ -1,0 +1,95 @@
+# version: '3.7'
+
+# volumes:
+#   pgdata:
+
+# networks:
+#   app-tier:
+#     driver: bridge
+
+# services:
+#   checkin:
+#     build:
+#       context: src
+#       dockerfile: checkin/Dockerfile
+#     ports:
+#       - "5001:5001"
+#     networks:
+#       - app-tier
+#     volumes:
+#       - type: bind
+#         source: ./src/checkin
+#         target: /app
+#     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5001", "--reload"]
+#     environment:
+#       - POSTGRES__USERNAME=${POSTGRES__USERNAME}
+#       - POSTGRES__PASSWORD=${POSTGRES__PASSWORD}
+#       - POSTGRES__DB=${POSTGRES__DB}
+#       - POSTGRES__HOST=${POSTGRES__HOST}
+#       - HOST_DETECTOR=${HOST_DETECTOR}
+#       - HOST_EMBEDDING=${HOST_EMBEDDING}
+#       - HOST_LANDMARK=${HOST_LANDMARK}
+
+#   model_deployed:
+#     build:
+#       context: src
+#       dockerfile: model_deployed/Dockerfile
+#     ports:
+#       - "5000:5000"
+#     networks:
+#       - app-tier
+#     volumes:
+#       - type: bind
+#         source: ./src/model_deployed
+#         target: /app
+#     command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+#     environment:
+#     - EMBEDDING__MODEL_PATH=${EMBEDDING__MODEL_PATH}
+#     - EMBEDDING__TASK_NAME=${EMBEDDING__TASK_NAME}
+#     - EMBEDDING__INPUT_MEAN_AVAILABLE=${EMBEDDING__INPUT_MEAN_AVAILABLE}
+#     - EMBEDDING__INPUT_STD_AVAILABLE=${EMBEDDING__INPUT_STD_AVAILABLE}
+#     - EMBEDDING__INPUT_MEAN_UNAVAILABLE=${EMBEDDING__INPUT_MEAN_UNAVAILABLE}
+#     - EMBEDDING__INPUT_STD_UNAVAILABLE=${EMBEDDING__INPUT_STD_UNAVAILABLE}
+#     - FACE_ALIGN__FILE_CONFIG_PATH=${FACE_ALIGN__FILE_CONFIG_PATH}
+#     - DETECTOR__MODEL_PATH=${DETECTOR__MODEL_PATH}
+#     - DETECTOR__CONF=${DETECTOR__CONF}
+#     - DETECTOR__NMS_THRESH=${DETECTOR__NMS_THRESH}
+#     - DETECTOR__INPUT_MEAN=${DETECTOR__INPUT_MEAN}
+#     - DETECTOR__INPUT_STD=${DETECTOR__INPUT_STD}
+#     - DETECTOR__ANCHOR_RATIO=${DETECTOR__ANCHOR_RATIO}
+#     - DETECTOR__NUM_ANCHORS=${DETECTOR__NUM_ANCHORS}
+#     - LANDMARK__MODEL_PATH=${LANDMARK__MODEL_PATH}
+#     - LANDMARK__INPUT_MEAN_AVAILABLE=${LANDMARK__INPUT_MEAN_AVAILABLE}
+#     - LANDMARK__INPUT_STD_AVAILABLE=${LANDMARK__INPUT_STD_AVAILABLE}
+#     - LANDMARK__INPUT_MEAN_UNAVAILABLE=${LANDMARK__INPUT_MEAN_UNAVAILABLE}
+#     - LANDMARK__INPUT_STD_UNAVAILABLE=${LANDMARK__INPUT_STD_UNAVAILABLE}
+#     - EMBEDDING_THRESH=${EMBEDDING_THRESH}
+#   minio:
+#     image: quay.io/minio/minio
+#     ports:
+#       - 17000:9000
+#       - 17001:9001
+#     networks:
+#       - app-tier
+#     environment:
+#       - MINIO_ROOT_USER=${FRONTEND_USERNAME}
+#       - MINIO_ROOT_PASSWORD=${FRONTEND_PASSWORD}
+#       - MINIO_PROMETHEUS_AUTH_TYPE=public
+#     volumes:
+#       - ./minio/data:/data
+#     command: server /data --console-address ":9001"
+#   postgres:
+#     image: postgres:17.0-alpine
+#     restart: always
+#     ports:
+#       - 15432:5432
+#     networks:
+#       - app-tier
+#     environment:
+#       - POSTGRES_USERNAME=${POSTGRES__USERNAME}
+#       - POSTGRES_PASSWORD=${POSTGRES__PASSWORD}
+#       - POSTGRES_DB=${POSTGRES__DB}
+#       - POSTGRES_HOST=${POSTGRES__HOST}
+
+#     volumes:
+#         - ./data/pg_history:/var/lib/postgresql/data
