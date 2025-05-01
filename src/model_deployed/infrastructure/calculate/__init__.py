@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from .cal_box import CardAlignModel
+from .cal_height2D import CardAlignModel
 
 __all__ = ['CardAlignModel']

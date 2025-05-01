@@ -13,23 +13,23 @@ from mediapipe.tasks.python.vision.pose_landmarker import Landmark
 logger = get_logger(__name__)
 
 
-class HeightInput(BaseModel):
+class CalHeightInput(BaseModel):
     landmarks: List[List[Landmark]]
     img_width: float
     img_height: float
     px_per_cm: float
 
-class HeightOutput(BaseModel):
+class CalHeightOutput(BaseModel):
     heights: List[float]
     distances: List[List[float]]
     cm_direct: List[float]
     cm_sum: List[float]
     diffs: List[float]
 
-class HeightService(BaseService):
+class CalHeight(BaseService):
     settings: Settings
 
-    async def process(self, input: HeightInput) -> HeightOutput:
+    async def process(self, input: CalHeightInput) -> CalHeightOutput:
         heights, distances, cm_direct, cm_sum, diffs = [], [], [], [], []
 
         for lm in input.landmarks:
@@ -49,7 +49,7 @@ class HeightService(BaseService):
             cm_sum.append(cm_s)
             diffs.append(diff)
 
-        return HeightOutput(
+        return CalHeightOutput(
             heights=heights,
             distances=distances,
             cm_direct=cm_direct,
@@ -83,54 +83,54 @@ class HeightService(BaseService):
         p_mouth_l = (int(mouth_l.x * w), int(mouth_l.y * h))
         p_nose = (int(nose.x * w), int(nose.y * h))
 
-        d_ankle_heel = self.perp_dist(p_ankle_l, p_heel_l, p_foot_l)
-        d_knee_ankle = self.dist(p_knee_l, p_ankle_l)
-        d_hip_knee = self.dist(p_hip_l, p_knee_l)
-        d_shoulder_hip = self.dist(
-            self.midpoint(p_shoulder_l, p_shoulder_r),
-            self.midpoint(p_hip_l, p_hip_r)
+        d_ankle_heel_foot = self.cal_perpendicular_distance(p_ankle_l, p_heel_l, p_foot_l)
+        d_knee_ankle = self.cal_distance(p_knee_l, p_ankle_l)
+        d_hip_knee = self.cal_distance(p_hip_l, p_knee_l)
+        d_shoulder_hip = self.cal_distance(
+            self.cal_midpoint(p_shoulder_l, p_shoulder_r),
+            self.cal_midpoint(p_hip_l, p_hip_r)
         )
-        d_mouth_shoulder = self.dist(
-            self.midpoint(p_mouth_l, p_mouth_r),
-            self.midpoint(p_shoulder_l, p_shoulder_r)
+        d_mouth_shoulder = self.cal_distance(
+            self.cal_midpoint(p_mouth_l, p_mouth_r),
+            self.cal_midpoint(p_shoulder_l, p_shoulder_r)
         )
-        d_nose_mouth = self.perp_dist(p_nose, p_mouth_l, p_mouth_r)
-        d_nose_head = 3.236 * d_nose_mouth
+        d_nose_mouth = self.cal_perpendicular_distance(p_nose, p_mouth_l, p_mouth_r)
+        d_nose_Tophead = 3.236 * d_nose_mouth
 
-        height = sum([
-            d_ankle_heel,
-            d_knee_ankle,
-            d_hip_knee,
-            d_shoulder_hip,
-            d_mouth_shoulder,
-            d_nose_mouth,
-            d_nose_head
-        ])
+        height = (
+            d_ankle_heel_foot +
+            d_knee_ankle +
+            d_hip_knee +
+            d_shoulder_hip +
+            d_mouth_shoulder +
+            d_nose_mouth +
+            d_nose_Tophead
+        )
 
         dists = [
-            d_ankle_heel,
+            d_ankle_heel_foot,
             d_knee_ankle,
             d_hip_knee,
             d_shoulder_hip,
             d_mouth_shoulder,
             d_nose_mouth,
-            d_nose_head
+            d_nose_Tophead
         ]
 
         return height, dists
     
     # khoảng cách giữa 2 điểm
-    def calculate_distance(self, point1: Tuple[float, float], point2: Tuple[float, float]) -> float:
+    def cal_distance(self, point1: Tuple[float, float], point2: Tuple[float, float]) -> float:
         # Calculate Euclidean distance between two points
         return np.linalg.norm(np.array(point1) - np.array(point2))
 
     # điểm trung tuyến
-    def calculate_midpoint(self, point1: Tuple[float, float], point2: Tuple[float, float]) -> Tuple[float, float]:
+    def cal_midpoint(self, point1: Tuple[float, float], point2: Tuple[float, float]) -> Tuple[float, float]:
         # Calculate midpoint between two points
         return ((point1[0] + point2[0]) / 2, (point1[1] + point2[1]) / 2)
 
     # Tính khoảng cách vuông góc đến đường trung tuyến 
-    def calculate_perpendicular_distance(self, point: Tuple[float, float], line_start: Tuple[float, float], line_end: Tuple[float, float]) -> float:
+    def cal_perpendicular_distance(self, point: Tuple[float, float], line_start: Tuple[float, float], line_end: Tuple[float, float]) -> float:
         # Check if the line is vertical (x coordinates are the same)
         if line_end[0] == line_start[0]:
             # If the line is vertical, the perpendicular distance is simply the absolute difference in x coordinates
