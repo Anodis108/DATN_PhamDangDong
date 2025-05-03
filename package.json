@@ -1,0 +1,20 @@
+{
+  "name": "datn_phamdangdong",
+  "version": "1.0.0",
+  "description": "Trước mắt đăng tính luôn khoảng cách từ mũi đến đỉnh đầu là 3.256",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anodis108/DATN_PhamDangDong.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anodis108/DATN_PhamDangDong/issues"
+  },
+  "homepage": "https://github.com/Anodis108/DATN_PhamDangDong#readme"
+}
