@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from apis.helper import LoggingMiddleware
-from apis.routers.card_detector import card_detector
-from apis.routers.text_detector import text_detector
-from apis.routers.text_ocr import text_ocr
 from asgi_correlation_id import CorrelationIdMiddleware
 from common.logs import get_logger
 from common.logs import setup_logging
+from DATN_PhamDangDong.src.model_deployed.apis.routers.box_detector import card_detector
+from DATN_PhamDangDong.src.model_deployed.apis.routers.height_caculator import text_ocr
+from DATN_PhamDangDong.src.model_deployed.apis.routers.pose_detector import text_detector
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
