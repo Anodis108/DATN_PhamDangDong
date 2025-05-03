@@ -46,34 +46,34 @@ class ExceptionHandler(BaseModel):
 
         return JSONResponse(content=response_data, status_code=code)
 
-    def handle_exception(self, err_msg: str, details: dict) -> JSONResponse:
+    def handle_exception(self, err_msg: str, extra: dict) -> JSONResponse:
         """Handle exception
 
         Args:
             err_msg (str): exception message
-            details (dict): extra information
+            extra (dict): extra information
 
         Returns:
             Response: response object
         """
-        self.logger.exception(err_msg, extra=details)
+        self.logger.exception(err_msg, extra=extra)
 
         return self._build_response(
             ResponseMessage.INTERNAL_SERVER_ERROR.value,
             code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    def handle_not_found_error(self, err_msg: str, details: dict) -> JSONResponse:
+    def handle_not_found_error(self, err_msg: str, extra: dict) -> JSONResponse:
         """Handle not found error
 
         Args:
             err_msg (str): message
-            details (dict): extra information
+            extra (dict): extra information
 
         Returns:
             Response: response object
         """
-        self.logger.error(err_msg, extra=details)
+        self.logger.error(err_msg, extra=extra)
 
         return self._build_response(
             ResponseMessage.NOT_FOUND.value,
@@ -97,15 +97,15 @@ class ExceptionHandler(BaseModel):
             code=status.HTTP_200_OK,
         )
 
-    def handle_bad_request(self, err_msg: str, details: dict) -> JSONResponse:
-        self.logger.error(err_msg, extra=details)
+    def handle_bad_request(self, err_msg: str, extra: dict) -> JSONResponse:
+        self.logger.error(err_msg, extra=extra)
         return self._build_response(
             ResponseMessage.BAD_REQUEST.value,
             code=status.HTTP_400_BAD_REQUEST,
         )
 
-    def handle_unprocessable_entity(self, err_msg: str, details: dict) -> JSONResponse:
-        self.logger.error(err_msg, extra=details)
+    def handle_unprocessable_entity(self, err_msg: str, extra: dict) -> JSONResponse:
+        self.logger.error(err_msg, extra=extra)
         return self._build_response(
             ResponseMessage.UNPROCESSABLE_ENTITY.value,
             code=status.HTTP_422_UNPROCESSABLE_ENTITY,

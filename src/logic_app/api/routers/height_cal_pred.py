@@ -4,9 +4,9 @@ import cv2
 import numpy as np
 from api.helper.exception_handler import ExceptionHandler
 from api.helper.exception_handler import ResponseMessage
-from api.models.ocr_card import APIOutput
-from app.ocr import OCRInput
-from app.ocr import OCRService
+from app.height_cal_pred import HeightInput
+from app.height_cal_pred import HeightOutput
+from app.height_cal_pred import HeightService
 from common.logs import get_logger
 from common.utils import get_settings
 from fastapi import APIRouter
@@ -15,19 +15,15 @@ from fastapi import status
 from fastapi import UploadFile
 from fastapi.encoders import jsonable_encoder
 
-
-ocr = APIRouter(prefix='/v1')
+# Khởi tạo router
+height_api = APIRouter(prefix='/v1')
 logger = get_logger(__name__)
-
 settings = get_settings()
 
 
-# Define API input
-
-
-@ocr.post(
-    '/ocr',
-    # response_model=APIOutput,
+@height_api.post(
+    '/height',
+    response_model=HeightOutput,  # Optional: dùng nếu muốn FastAPI auto gen schema
     responses={
         status.HTTP_200_OK: {
             'content': {
@@ -35,13 +31,7 @@ settings = get_settings()
                     'example': {
                         'message': ResponseMessage.SUCCESS,
                         'info': {
-                            'info_text': [
-                                {
-                                    'class_name': 'name',
-                                    'bounding_box': [100.0, 200.0, 300.0, 400.0],
-                                    'text': 'Nguyen Van A',
-                                },
-                            ],
+                            'results': [170.2],
                         },
                     },
                 },
@@ -89,13 +79,16 @@ settings = get_settings()
         },
     },
 )
-async def ocr_card(file: UploadFile = File(...)):
+async def predict_height(file: UploadFile = File(...)):
     exception_handler = ExceptionHandler(
         logger=logger.bind(), service_name=__name__,
     )
 
     try:
-        logger.info('Received OCR request', extra={'file_name': file.filename})
+        logger.info(
+            'Received height prediction request',
+            extra={'file_name': file.filename},
+        )
         contents = await file.read()
 
         nparr = np.frombuffer(contents, np.uint8)
@@ -106,40 +99,45 @@ async def ocr_card(file: UploadFile = File(...)):
     except Exception as e:
         return exception_handler.handle_exception(
             err_msg=f'Error while reading and decoding file: {e}',
-            details={'file_name': file.filename},
-        )
-    # Define application
-    try:
-        logger.info(
-            'Initializing OCR model...',
             extra={'file_name': file.filename},
         )
-        ocr_model = OCRService(settings=settings)
+
+    # Initialize model
+    try:
         logger.info(
-            'OCR model initialized successfully',
+            'Initializing HeightService model...',
+            extra={'file_name': file.filename},
+        )
+        height_model = HeightService(settings=settings)
+        logger.info(
+            'HeightService model initialized successfully',
             extra={'file_name': file.filename},
         )
     except Exception as e:
         return exception_handler.handle_exception(
-            f'Failed to initialize OCR model: {e}',
-            details={'file_name': file.filename},
-        )
-    # infer
-    try:
-        logger.info(
-            'Running OCR inference...', extra={
-                'file_name': file.filename,
-            },
-        )
-        text_ocr_result = ocr_model.process(
-            inputs=OCRInput(image=img_array),
+            f'Failed to initialize HeightService model: {e}',
+            extra={'file_name': file.filename},
         )
 
-        api_output = APIOutput(info_text=text_ocr_result.results)
-        return exception_handler.handle_success(jsonable_encoder(api_output))
+    # Inference
+    try:
+        logger.info(
+            'Running height prediction...',
+            extra={'file_name': file.filename},
+        )
+        height_result = height_model.process(
+            inputs=HeightInput(image=img_array),
+        )
+
+        return exception_handler.handle_success(
+            jsonable_encoder({
+                'message': ResponseMessage.SUCCESS,
+                'info': height_result.dict(),
+            }),
+        )
 
     except Exception as e:
         return exception_handler.handle_exception(
-            f'OCR processing failed: {e}',
-            details={'file_name': file.filename},
+            f'Height prediction failed: {e}',
+            extra={'file_name': file.filename},
         )
