@@ -5,8 +5,8 @@ import unittest
 import cv2
 from common.utils import get_settings
 from fastapi.encoders import jsonable_encoder
-from infrastructure.card_detector import CardDetector
-from infrastructure.card_detector import CardDetectorInput
+from infrastructure.box_detector import CardDetector
+from infrastructure.box_detector import CardDetectorInput
 
 
 class TestCardDetector(unittest.TestCase):

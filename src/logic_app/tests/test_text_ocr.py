@@ -5,8 +5,8 @@ import unittest
 import cv2
 from common.utils import get_settings
 from fastapi.encoders import jsonable_encoder
-from infrastructure.text_ocr import TextOCR
-from infrastructure.text_ocr import TextOCRInput
+from infrastructure.height_calculator import TextOCR
+from infrastructure.height_calculator import TextOCRInput
 
 
 class TestTextOCR(unittest.TestCase):
