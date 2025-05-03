@@ -20,7 +20,8 @@ class BoxDetectorModelInput(BaseModel):
 class BoxDetectorModelOutput(BaseModel):
     bboxes: np.ndarray  # (N, 4)
     scores: np.ndarray  # (N,)
-    pixel_per_cm: float 
+    pixel_per_cm: float
+
 
 class BoxDetectorModel(BaseService):
     settings: Settings
@@ -88,7 +89,6 @@ class BoxDetectorModel(BaseService):
 
         return scores, bboxes_xyxy, pixel_per_cm
 
-
     def nms(self, dets: np.ndarray) -> list[int]:
         thresh = self.settings.Box_detector.conf
         x1 = dets[:, 0]
@@ -120,4 +120,4 @@ class BoxDetectorModel(BaseService):
         return keep
 
     def cal_pixel_per_cm(self, h_box_det: float) -> float:
-            return h_box_det / self.settings.box_detector.base_h
+        return h_box_det / self.settings.box_detector.base_h
