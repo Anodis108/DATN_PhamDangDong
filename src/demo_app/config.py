@@ -21,3 +21,5 @@ img_logo_path = os.path.join(ROOT, r'logo.ico')
 SERVER_IP = '192.168.1.78'  # IP của Raspberry Pi
 PORT = 12345
 TIME_TO_PUSH_EVENT = 5
+
+save_dir = r'/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_result'

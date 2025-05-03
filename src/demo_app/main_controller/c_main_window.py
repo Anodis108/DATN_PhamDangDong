@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import os
 import time
+from datetime import datetime
 from queue import Queue
 
 import cv2
@@ -10,10 +11,17 @@ import numpy as np
 from common.settings import Settings
 from config import camera_path
 from config import img_logo_path
+from config import save_dir
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import QEvent
+from PyQt5.QtCore import QObject
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QVBoxLayout
 from thread.Thread_callAPI import APICallerThread
 from uis.main_window import Ui_MainWindow
 # import folium
@@ -52,6 +60,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setting = Settings()
         self.image_path = None
         self.test = 'test'
+
+        # self.ui.frame_2.setVisible(False)
 
     def connect_signal(self):
         self.ui.btn_choose_path.clicked.connect(self.choose_path_img)
@@ -137,69 +147,68 @@ class MainWindow(QtWidgets.QMainWindow):
             # Nếu là ảnh → hiển thị ảnh
             self.run_image_processing()
 
-    def display_results(self, image, name, born, HKTT, classes, course, MSV):
+    def display_results(self, fire_image, place, level, nhan):
         self.update_results(mode='push')
+        save_img_path, timestamp = self.save_img(fire_image, save_dir)
 
-        self.display_image_on_label(self.ui.label_img_result1, image)
-        self.ui.label_name_result1.setText(name)
-        self.ui.label_born_result1.setText(born)
-        self.ui.label_HKTT_result1.setText(HKTT)
-        self.ui.label_class_result1.setText(classes)
-        self.ui.label_course_result1.setText(course)
-        self.ui.label_MSV_result1.setText(MSV)
+        self.display_image_on_label(self.ui.label_img_result1, fire_image)
+
+        # Gán đường dẫn ảnh vào property "img_path"
+        self.ui.label_img_result1.setProperty('img_path', save_img_path)
+
+        self.ui.label_time_result1.setText(
+            str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+        )
+        self.ui.label_place_result1.setText(place)
+        self.ui.label_level_result1.setText(level)
+        self.ui.lb_nhan_1.setText(nhan)
 
     def update_results(self, mode='push'):
         label_img_results = [
-            self.ui.label_img_result1, self.ui.label_img_result2,
+            self.ui.label_img_result1, self.ui.label_img_result2, self.ui.label_img_result3,
+            self.ui.label_img_result4,
         ]
-        label_name_results = [
-            self.ui.label_name_result1, self.ui.label_name_result2,
+
+        label_time_results = [
+            self.ui.label_time_result1, self.ui.label_time_result2, self.ui.label_time_result3,
+            self.ui.label_time_result4,
         ]
-        label_born_results = [
-            self.ui.label_born_result1, self.ui.label_born_result2,
+
+        label_place_results = [
+            self.ui.label_place_result1, self.ui.label_place_result2, self.ui.label_place_result3,
+            self.ui.label_place_result4,
         ]
-        label_HKTT_results = [
-            self.ui.label_HKTT_result1, self.ui.label_HKTT_result2,
+        label_level_results = [
+            self.ui.label_level_result1, self.ui.label_level_result2, self.ui.label_level_result3,
+            self.ui.label_level_result4,
         ]
-        label_class_results = [
-            self.ui.label_class_result1, self.ui.label_class_result2,
-        ]
-        label_course_results = [
-            self.ui.label_course_result1, self.ui.label_course_result2,
-        ]
-        label_MSV_results = [
-            self.ui.label_MSV_result1, self.ui.label_MSV_result2,
+        lb_nhan_ = [
+            self.ui.lb_nhan_1, self.ui.lb_nhan_2,
+            self.ui.lb_nhan_3, self.ui.lb_nhan_4,
         ]
 
         if mode == 'push':
-            print(1)
-            for i in range(1, 0, -1):
+            for i in range(3, 0, -1):
                 label_img_results[i].clear()
-                if label_img_results[i-1].pixmap() is not None:
-                    label_img_results[i].setPixmap(
-                        label_img_results[i-1].pixmap().copy(),
-                    )
                 label_img_results[i].setPixmap(label_img_results[i-1].pixmap())
-                label_name_results[i].setText(label_name_results[i-1].text())
-                label_born_results[i].setText(label_born_results[i-1].text())
-                label_HKTT_results[i].setText(label_HKTT_results[i-1].text())
-                label_class_results[i].setText(label_class_results[i-1].text())
-                label_course_results[i].setText(
-                    label_course_results[i-1].text(),
-                )
-                label_MSV_results[i].setText(label_MSV_results[i-1].text())
-            print(2)
+                old_path = label_img_results[i-1].property('img_path')
+                label_img_results[i].setProperty('img_path', old_path)
+                label_time_results[i].setText(label_time_results[i-1].text())
+                label_place_results[i].setText(label_place_results[i-1].text())
+                label_level_results[i].setText(label_level_results[i-1].text())
+                lb_nhan_[i].setText(lb_nhan_[i-1].text())
         elif mode == 'clear':
             for i in range(4):
                 label_img_results[i].setPixmap(
                     QtGui.QPixmap('./resources/icons/folder_icon.png'),
                 )
-                label_name_results[i].setText('Họ tên')
-                label_born_results[i].setText('Ngày sinh')
-                label_HKTT_results[i].setText('HKTT')
-                label_class_results[i].setText('Lớp')
-                label_course_results[i].setText('Khóa học')
-                label_MSV_results[i].setText('Mã SV')
+                label_time_results[i].setText('Time')
+                label_place_results[i].setText('')
+                label_level_results[i].setText('')
+                lb_nhan_[i].setText('')
+        for label in label_img_results:
+            label.setAlignment(Qt.AlignCenter)
+            label.installEventFilter(self)
 
     def display_image_on_label(self, ui_label, image):
         pixmap = QtGui.QImage(
@@ -250,6 +259,31 @@ class MainWindow(QtWidgets.QMainWindow):
         filename = f'image_{timestamp}.jpg'
         save_path = os.path.join(save_dir, filename)
         cv2.imwrite(save_path, image)
+        return save_path, timestamp
+
+    def eventFilter(self, obj: QObject, event: QEvent) -> bool:
+        if isinstance(obj, QLabel) and event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
+            path = obj.property('img_path')
+            if path:
+                self.show_image_window(path)
+            return True
+        return super().eventFilter(obj, event)
+
+    def show_image_window(self, img_path):
+        window = QDialog()
+        window.setWindowTitle('Hiển thị ảnh')
+        window.resize(1440, 810)
+        layout = QVBoxLayout()
+        window.setLayout(layout)
+        label = QLabel()
+        pixmap = QPixmap(img_path)
+        if pixmap.isNull():
+            label.setText('Không thể đọc ảnh.')
+        else:
+            label.setPixmap(pixmap.scaled(1440, 810, Qt.KeepAspectRatio))
+            label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(label)
+        window.exec_()
 
     def send_data_to_api(self, api_url, data):
         self.api_thread.call_api(api_url, data)

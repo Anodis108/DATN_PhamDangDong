@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'main_window2.ui'
+# Form implementation generated from reading ui file 'main_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.11
 #
@@ -15,7 +15,7 @@ from PyQt5 import QtWidgets
 class Ui_MainWindow:
     def setupUi(self, MainWindow):
         MainWindow.setObjectName('MainWindow')
-        MainWindow.resize(1133, 787)
+        MainWindow.resize(1284, 854)
         MainWindow.setStyleSheet('')
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setStyleSheet('background: rgba(50,50,50,0.5)')
@@ -84,6 +84,122 @@ class Ui_MainWindow:
         self.label_avatar.setObjectName('label_avatar')
         self.horizontalLayout_5.addWidget(self.label_avatar)
         self.verticalLayout_6.addWidget(self.frame_avatar)
+        self.frame_2 = QtWidgets.QFrame(self.fr_main_functions)
+        self.frame_2.setStyleSheet(
+            'QFrame#frame_2\n'
+            '{\n'
+            '    color: white;\n'
+            '    border-radius: 15px; \n'
+            '    border: 2px solid white;\n'
+            '}\n'
+            '',
+        )
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName('frame_2')
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_2)
+        self.verticalLayout_2.setObjectName('verticalLayout_2')
+        self.frame_3 = QtWidgets.QFrame(self.frame_2)
+        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_3.setObjectName('frame_3')
+        self.gridLayout_7 = QtWidgets.QGridLayout(self.frame_3)
+        self.gridLayout_7.setObjectName('gridLayout_7')
+        self.btn_choose_detect = QtWidgets.QPushButton(self.frame_3)
+        self.btn_choose_detect.setMinimumSize(QtCore.QSize(80, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        self.btn_choose_detect.setFont(font)
+        self.btn_choose_detect.setStyleSheet(
+            'QPushButton#btn_choose_detect\n'
+            '{\n'
+            '   background-color: rgba(255,255,255,0.4);\n'
+            '    color: white;\n'
+            '    border-radius: 5px; \n'
+            '    border: 2px solid white;\n'
+            '}\n'
+            'QPushButton:hover#btn_choose_detect\n'
+            '{\n'
+            '   background-color: orange\n'
+            '}\n'
+            'QPushButton:pressed#btn_choose_detect\n'
+            '{\n'
+            '    background-color: white;\n'
+            '    color: black;\n'
+            '    padding-left: 5px;\n'
+            '    padding-top: 5px;\n'
+            '}\n'
+            '',
+        )
+        self.btn_choose_detect.setObjectName('btn_choose_detect')
+        self.gridLayout_7.addWidget(self.btn_choose_detect, 0, 0, 1, 1)
+        self.le_detect_path = QtWidgets.QLineEdit(self.frame_3)
+        self.le_detect_path.setMinimumSize(QtCore.QSize(0, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.le_detect_path.setFont(font)
+        self.le_detect_path.setStyleSheet(
+            'background: rgba(255,255,255,0.95);\n'
+            'border: 2px solid white;',
+        )
+        self.le_detect_path.setReadOnly(True)
+        self.le_detect_path.setObjectName('le_detect_path')
+        self.gridLayout_7.addWidget(self.le_detect_path, 0, 1, 1, 1)
+        self.verticalLayout_2.addWidget(self.frame_3)
+        self.frame = QtWidgets.QFrame(self.frame_2)
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName('frame')
+        self.gridLayout_8 = QtWidgets.QGridLayout(self.frame)
+        self.gridLayout_8.setObjectName('gridLayout_8')
+        self.le_segment_path = QtWidgets.QLineEdit(self.frame)
+        self.le_segment_path.setMinimumSize(QtCore.QSize(0, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(False)
+        font.setWeight(50)
+        self.le_segment_path.setFont(font)
+        self.le_segment_path.setStyleSheet(
+            'background: rgba(255,255,255,0.95);\n'
+            'border: 2px solid white;',
+        )
+        self.le_segment_path.setReadOnly(True)
+        self.le_segment_path.setObjectName('le_segment_path')
+        self.gridLayout_8.addWidget(self.le_segment_path, 0, 1, 1, 1)
+        self.btn_choose_segment = QtWidgets.QPushButton(self.frame)
+        self.btn_choose_segment.setMinimumSize(QtCore.QSize(80, 31))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        self.btn_choose_segment.setFont(font)
+        self.btn_choose_segment.setStyleSheet(
+            'QPushButton#btn_choose_segment\n'
+            '{\n'
+            '   background-color: rgba(255,255,255,0.4);\n'
+            '    color: white;\n'
+            '    border-radius: 5px; \n'
+            '    border: 2px solid white;\n'
+            '}\n'
+            'QPushButton:hover#btn_choose_segment\n'
+            '{\n'
+            '   background-color: orange\n'
+            '}\n'
+            'QPushButton:pressed#btn_choose_segment\n'
+            '{\n'
+            '    background-color: white;\n'
+            '    color: black;\n'
+            '    padding-left: 5px;\n'
+            '    padding-top: 5px;\n'
+            '}\n'
+            '',
+        )
+        self.btn_choose_segment.setObjectName('btn_choose_segment')
+        self.gridLayout_8.addWidget(self.btn_choose_segment, 0, 0, 1, 1)
+        self.verticalLayout_2.addWidget(self.frame)
+        self.verticalLayout_6.addWidget(self.frame_2)
         self.frame_file_path = QtWidgets.QFrame(self.fr_main_functions)
         self.frame_file_path.setStyleSheet(
             'QFrame#frame_file_path\n'
@@ -389,6 +505,26 @@ class Ui_MainWindow:
         self.verticalLayout_12.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_12.setSpacing(0)
         self.verticalLayout_12.setObjectName('verticalLayout_12')
+        self.fr_label_result1 = QtWidgets.QFrame(self.widget_result1)
+        self.fr_label_result1.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.fr_label_result1.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.fr_label_result1.setObjectName('fr_label_result1')
+        self.verticalLayout_13 = QtWidgets.QVBoxLayout(self.fr_label_result1)
+        self.verticalLayout_13.setContentsMargins(0, 0, 0, 10)
+        self.verticalLayout_13.setSpacing(0)
+        self.verticalLayout_13.setObjectName('verticalLayout_13')
+        self.label_result1 = QtWidgets.QLabel(self.fr_label_result1)
+        self.label_result1.setMinimumSize(QtCore.QSize(0, 50))
+        self.label_result1.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_result1.setFont(font)
+        self.label_result1.setStyleSheet('color: white')
+        self.label_result1.setScaledContents(True)
+        self.label_result1.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_result1.setObjectName('label_result1')
+        self.verticalLayout_13.addWidget(self.label_result1)
+        self.verticalLayout_12.addWidget(self.fr_label_result1)
         self.fr_info_result1 = QtWidgets.QFrame(self.widget_result1)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding,
@@ -438,30 +574,21 @@ class Ui_MainWindow:
             self.widget_info_result1,
         )
         self.verticalLayout_11.setObjectName('verticalLayout_11')
-        self.label_name_result1 = QtWidgets.QLabel(self.widget_info_result1)
-        self.label_name_result1.setObjectName('label_name_result1')
-        self.verticalLayout_11.addWidget(self.label_name_result1)
-        self.label_born_result1 = QtWidgets.QLabel(self.widget_info_result1)
-        self.label_born_result1.setStyleSheet('color: white')
-        self.label_born_result1.setScaledContents(True)
-        self.label_born_result1.setObjectName('label_born_result1')
-        self.verticalLayout_11.addWidget(self.label_born_result1)
-        self.label_HKTT_result1 = QtWidgets.QLabel(self.widget_info_result1)
-        self.label_HKTT_result1.setObjectName('label_HKTT_result1')
-        self.verticalLayout_11.addWidget(self.label_HKTT_result1)
-        self.label_class_result1 = QtWidgets.QLabel(self.widget_info_result1)
-        self.label_class_result1.setStyleSheet('color: white')
-        self.label_class_result1.setScaledContents(True)
-        self.label_class_result1.setObjectName('label_class_result1')
-        self.verticalLayout_11.addWidget(self.label_class_result1)
-        self.label_course_result1 = QtWidgets.QLabel(self.widget_info_result1)
-        self.label_course_result1.setStyleSheet('color: white')
-        self.label_course_result1.setScaledContents(True)
-        self.label_course_result1.setObjectName('label_course_result1')
-        self.verticalLayout_11.addWidget(self.label_course_result1)
-        self.label_MSV_result1 = QtWidgets.QLabel(self.widget_info_result1)
-        self.label_MSV_result1.setObjectName('label_MSV_result1')
-        self.verticalLayout_11.addWidget(self.label_MSV_result1)
+        self.label_time_result1 = QtWidgets.QLabel(self.widget_info_result1)
+        self.label_time_result1.setStyleSheet('color: white')
+        self.label_time_result1.setScaledContents(True)
+        self.label_time_result1.setObjectName('label_time_result1')
+        self.verticalLayout_11.addWidget(self.label_time_result1)
+        self.label_height_result1 = QtWidgets.QLabel(self.widget_info_result1)
+        self.label_height_result1.setStyleSheet('color: white')
+        self.label_height_result1.setScaledContents(True)
+        self.label_height_result1.setObjectName('label_height_result1')
+        self.verticalLayout_11.addWidget(self.label_height_result1)
+        self.label_place_result1 = QtWidgets.QLabel(self.widget_info_result1)
+        self.label_place_result1.setStyleSheet('color: white')
+        self.label_place_result1.setScaledContents(True)
+        self.label_place_result1.setObjectName('label_place_result1')
+        self.verticalLayout_11.addWidget(self.label_place_result1)
         self.horizontalLayout_3.addWidget(self.widget_info_result1)
         self.verticalLayout_12.addWidget(self.fr_info_result1)
         self.horizontalLayout_9.addWidget(self.widget_result1)
@@ -475,6 +602,26 @@ class Ui_MainWindow:
         self.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_14.setSpacing(0)
         self.verticalLayout_14.setObjectName('verticalLayout_14')
+        self.fr_label_result2 = QtWidgets.QFrame(self.widget_result2)
+        self.fr_label_result2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.fr_label_result2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.fr_label_result2.setObjectName('fr_label_result2')
+        self.verticalLayout_15 = QtWidgets.QVBoxLayout(self.fr_label_result2)
+        self.verticalLayout_15.setContentsMargins(0, 0, 0, 10)
+        self.verticalLayout_15.setSpacing(0)
+        self.verticalLayout_15.setObjectName('verticalLayout_15')
+        self.label_result2 = QtWidgets.QLabel(self.fr_label_result2)
+        self.label_result2.setMinimumSize(QtCore.QSize(0, 50))
+        self.label_result2.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_result2.setFont(font)
+        self.label_result2.setStyleSheet('color: white')
+        self.label_result2.setScaledContents(True)
+        self.label_result2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_result2.setObjectName('label_result2')
+        self.verticalLayout_15.addWidget(self.label_result2)
+        self.verticalLayout_14.addWidget(self.fr_label_result2)
         self.fr_info_result2 = QtWidgets.QFrame(self.widget_result2)
         sizePolicy = QtWidgets.QSizePolicy(
             QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding,
@@ -524,39 +671,216 @@ class Ui_MainWindow:
             self.widget_info_result2,
         )
         self.verticalLayout_17.setObjectName('verticalLayout_17')
-        self.label_name_result2 = QtWidgets.QLabel(self.widget_info_result2)
-        self.label_name_result2.setStyleSheet('color: white')
-        self.label_name_result2.setScaledContents(True)
-        self.label_name_result2.setObjectName('label_name_result2')
-        self.verticalLayout_17.addWidget(self.label_name_result2)
-        self.label_born_result2 = QtWidgets.QLabel(self.widget_info_result2)
-        self.label_born_result2.setStyleSheet('color: white')
-        self.label_born_result2.setScaledContents(True)
-        self.label_born_result2.setObjectName('label_born_result2')
-        self.verticalLayout_17.addWidget(self.label_born_result2)
-        self.label_HKTT_result2 = QtWidgets.QLabel(self.widget_info_result2)
-        self.label_HKTT_result2.setStyleSheet('color: white')
-        self.label_HKTT_result2.setScaledContents(True)
-        self.label_HKTT_result2.setObjectName('label_HKTT_result2')
-        self.verticalLayout_17.addWidget(self.label_HKTT_result2)
-        self.label_class_result2 = QtWidgets.QLabel(self.widget_info_result2)
-        self.label_class_result2.setStyleSheet('color: white')
-        self.label_class_result2.setScaledContents(True)
-        self.label_class_result2.setObjectName('label_class_result2')
-        self.verticalLayout_17.addWidget(self.label_class_result2)
-        self.label_course_result2 = QtWidgets.QLabel(self.widget_info_result2)
-        self.label_course_result2.setStyleSheet('color: white')
-        self.label_course_result2.setScaledContents(True)
-        self.label_course_result2.setObjectName('label_course_result2')
-        self.verticalLayout_17.addWidget(self.label_course_result2)
-        self.label_MSV_result2 = QtWidgets.QLabel(self.widget_info_result2)
-        self.label_MSV_result2.setStyleSheet('color: white')
-        self.label_MSV_result2.setScaledContents(True)
-        self.label_MSV_result2.setObjectName('label_MSV_result2')
-        self.verticalLayout_17.addWidget(self.label_MSV_result2)
+        self.label_time_result2 = QtWidgets.QLabel(self.widget_info_result2)
+        self.label_time_result2.setStyleSheet('color: white')
+        self.label_time_result2.setScaledContents(True)
+        self.label_time_result2.setObjectName('label_time_result2')
+        self.verticalLayout_17.addWidget(self.label_time_result2)
+        self.label_height_result2 = QtWidgets.QLabel(self.widget_info_result2)
+        self.label_height_result2.setStyleSheet('color: white')
+        self.label_height_result2.setScaledContents(True)
+        self.label_height_result2.setObjectName('label_height_result2')
+        self.verticalLayout_17.addWidget(self.label_height_result2)
+        self.label_place_result2 = QtWidgets.QLabel(self.widget_info_result2)
+        self.label_place_result2.setStyleSheet('color: white')
+        self.label_place_result2.setScaledContents(True)
+        self.label_place_result2.setObjectName('label_place_result2')
+        self.verticalLayout_17.addWidget(self.label_place_result2)
         self.horizontalLayout_4.addWidget(self.widget_info_result2)
         self.verticalLayout_14.addWidget(self.fr_info_result2)
         self.horizontalLayout_9.addWidget(self.widget_result2)
+        self.widget_result3 = QtWidgets.QWidget(self.frame_output)
+        self.widget_result3.setStyleSheet(
+            'color: white;\n'
+            'border-radius: 15px; \n'
+            'border: 2px solid lightgray;',
+        )
+        self.widget_result3.setObjectName('widget_result3')
+        self.verticalLayout_30 = QtWidgets.QVBoxLayout(self.widget_result3)
+        self.verticalLayout_30.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_30.setSpacing(0)
+        self.verticalLayout_30.setObjectName('verticalLayout_30')
+        self.fr_label_result3 = QtWidgets.QFrame(self.widget_result3)
+        self.fr_label_result3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.fr_label_result3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.fr_label_result3.setObjectName('fr_label_result3')
+        self.verticalLayout_31 = QtWidgets.QVBoxLayout(self.fr_label_result3)
+        self.verticalLayout_31.setContentsMargins(0, 0, 0, 10)
+        self.verticalLayout_31.setSpacing(0)
+        self.verticalLayout_31.setObjectName('verticalLayout_31')
+        self.label_result3 = QtWidgets.QLabel(self.fr_label_result3)
+        self.label_result3.setMinimumSize(QtCore.QSize(0, 50))
+        self.label_result3.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_result3.setFont(font)
+        self.label_result3.setStyleSheet('color: white')
+        self.label_result3.setScaledContents(True)
+        self.label_result3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_result3.setObjectName('label_result3')
+        self.verticalLayout_31.addWidget(self.label_result3)
+        self.verticalLayout_30.addWidget(self.fr_label_result3)
+        self.fr_info_result3 = QtWidgets.QFrame(self.widget_result3)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding,
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.fr_info_result3.sizePolicy().hasHeightForWidth(),
+        )
+        self.fr_info_result3.setSizePolicy(sizePolicy)
+        self.fr_info_result3.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.fr_info_result3.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.fr_info_result3.setObjectName('fr_info_result3')
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.fr_info_result3)
+        self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_8.setSpacing(0)
+        self.horizontalLayout_8.setObjectName('horizontalLayout_8')
+        self.widget_img_result3 = QtWidgets.QWidget(self.fr_info_result3)
+        self.widget_img_result3.setObjectName('widget_img_result3')
+        self.verticalLayout_32 = QtWidgets.QVBoxLayout(self.widget_img_result3)
+        self.verticalLayout_32.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_32.setSpacing(0)
+        self.verticalLayout_32.setObjectName('verticalLayout_32')
+        self.label_img_result3 = QtWidgets.QLabel(self.widget_img_result3)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored,
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_img_result3.sizePolicy().hasHeightForWidth(),
+        )
+        self.label_img_result3.setSizePolicy(sizePolicy)
+        self.label_img_result3.setFrameShape(QtWidgets.QFrame.Box)
+        self.label_img_result3.setText('')
+        self.label_img_result3.setPixmap(
+            QtGui.QPixmap('E:/Qt_Designer/fire_icon.jpg'),
+        )
+        self.label_img_result3.setScaledContents(True)
+        self.label_img_result3.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_img_result3.setObjectName('label_img_result3')
+        self.verticalLayout_32.addWidget(self.label_img_result3)
+        self.horizontalLayout_8.addWidget(self.widget_img_result3)
+        self.widget_info_result3 = QtWidgets.QWidget(self.fr_info_result3)
+        self.widget_info_result3.setStyleSheet('color: white')
+        self.widget_info_result3.setObjectName('widget_info_result3')
+        self.verticalLayout_33 = QtWidgets.QVBoxLayout(
+            self.widget_info_result3,
+        )
+        self.verticalLayout_33.setObjectName('verticalLayout_33')
+        self.label_time_result3 = QtWidgets.QLabel(self.widget_info_result3)
+        self.label_time_result3.setScaledContents(True)
+        self.label_time_result3.setObjectName('label_time_result3')
+        self.verticalLayout_33.addWidget(self.label_time_result3)
+        self.label_height_result3 = QtWidgets.QLabel(self.widget_info_result3)
+        self.label_height_result3.setScaledContents(True)
+        self.label_height_result3.setObjectName('label_height_result3')
+        self.verticalLayout_33.addWidget(self.label_height_result3)
+        self.label_place_result3 = QtWidgets.QLabel(self.widget_info_result3)
+        self.label_place_result3.setScaledContents(True)
+        self.label_place_result3.setObjectName('label_place_result3')
+        self.verticalLayout_33.addWidget(self.label_place_result3)
+        self.horizontalLayout_8.addWidget(self.widget_info_result3)
+        self.verticalLayout_30.addWidget(self.fr_info_result3)
+        self.horizontalLayout_9.addWidget(self.widget_result3)
+        self.widget_result4 = QtWidgets.QWidget(self.frame_output)
+        self.widget_result4.setStyleSheet(
+            'color: white;\n'
+            'border-radius: 15px; \n'
+            'border: 2px solid lightgray;',
+        )
+        self.widget_result4.setObjectName('widget_result4')
+        self.verticalLayout_26 = QtWidgets.QVBoxLayout(self.widget_result4)
+        self.verticalLayout_26.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_26.setSpacing(0)
+        self.verticalLayout_26.setObjectName('verticalLayout_26')
+        self.fr_label_result4 = QtWidgets.QFrame(self.widget_result4)
+        self.fr_label_result4.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.fr_label_result4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.fr_label_result4.setObjectName('fr_label_result4')
+        self.verticalLayout_27 = QtWidgets.QVBoxLayout(self.fr_label_result4)
+        self.verticalLayout_27.setContentsMargins(0, 0, 0, 10)
+        self.verticalLayout_27.setSpacing(0)
+        self.verticalLayout_27.setObjectName('verticalLayout_27')
+        self.label_result4 = QtWidgets.QLabel(self.fr_label_result4)
+        self.label_result4.setMinimumSize(QtCore.QSize(0, 50))
+        self.label_result4.setMaximumSize(QtCore.QSize(16777215, 50))
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_result4.setFont(font)
+        self.label_result4.setStyleSheet('color: white')
+        self.label_result4.setScaledContents(True)
+        self.label_result4.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_result4.setObjectName('label_result4')
+        self.verticalLayout_27.addWidget(self.label_result4)
+        self.verticalLayout_26.addWidget(self.fr_label_result4)
+        self.fr_info_result4 = QtWidgets.QFrame(self.widget_result4)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Expanding,
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.fr_info_result4.sizePolicy().hasHeightForWidth(),
+        )
+        self.fr_info_result4.setSizePolicy(sizePolicy)
+        self.fr_info_result4.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.fr_info_result4.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.fr_info_result4.setObjectName('fr_info_result4')
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.fr_info_result4)
+        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_7.setSpacing(0)
+        self.horizontalLayout_7.setObjectName('horizontalLayout_7')
+        self.widget_img_result4 = QtWidgets.QWidget(self.fr_info_result4)
+        self.widget_img_result4.setObjectName('widget_img_result4')
+        self.verticalLayout_28 = QtWidgets.QVBoxLayout(self.widget_img_result4)
+        self.verticalLayout_28.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_28.setSpacing(0)
+        self.verticalLayout_28.setObjectName('verticalLayout_28')
+        self.label_img_result4 = QtWidgets.QLabel(self.widget_img_result4)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored,
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_img_result4.sizePolicy().hasHeightForWidth(),
+        )
+        self.label_img_result4.setSizePolicy(sizePolicy)
+        self.label_img_result4.setFrameShape(QtWidgets.QFrame.Box)
+        self.label_img_result4.setText('')
+        self.label_img_result4.setPixmap(
+            QtGui.QPixmap('E:/Qt_Designer/fire_icon.jpg'),
+        )
+        self.label_img_result4.setScaledContents(True)
+        self.label_img_result4.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_img_result4.setObjectName('label_img_result4')
+        self.verticalLayout_28.addWidget(self.label_img_result4)
+        self.horizontalLayout_7.addWidget(self.widget_img_result4)
+        self.widget_info_result4 = QtWidgets.QWidget(self.fr_info_result4)
+        self.widget_info_result4.setStyleSheet('color: white')
+        self.widget_info_result4.setObjectName('widget_info_result4')
+        self.verticalLayout_29 = QtWidgets.QVBoxLayout(
+            self.widget_info_result4,
+        )
+        self.verticalLayout_29.setObjectName('verticalLayout_29')
+        self.label_time_result4 = QtWidgets.QLabel(self.widget_info_result4)
+        self.label_time_result4.setScaledContents(True)
+        self.label_time_result4.setObjectName('label_time_result4')
+        self.verticalLayout_29.addWidget(self.label_time_result4)
+        self.label_height_result4 = QtWidgets.QLabel(self.widget_info_result4)
+        self.label_height_result4.setScaledContents(True)
+        self.label_height_result4.setObjectName('label_height_result4')
+        self.verticalLayout_29.addWidget(self.label_height_result4)
+        self.label_place_result4 = QtWidgets.QLabel(self.widget_info_result4)
+        self.label_place_result4.setScaledContents(True)
+        self.label_place_result4.setObjectName('label_place_result4')
+        self.verticalLayout_29.addWidget(self.label_place_result4)
+        self.horizontalLayout_7.addWidget(self.widget_info_result4)
+        self.verticalLayout_26.addWidget(self.fr_info_result4)
+        self.horizontalLayout_9.addWidget(self.widget_result4)
         self.gridLayout_4.addWidget(self.frame_output, 1, 0, 1, 1)
         self.stackedWidget.addWidget(self.home_page)
         self.maps_page = QtWidgets.QWidget()
@@ -582,75 +906,7 @@ class Ui_MainWindow:
         self.gridLayout_5.addWidget(self.frame_maps_body, 0, 0, 1, 1)
         self.stackedWidget.addWidget(self.maps_page)
         self.gridLayout_2.addWidget(self.stackedWidget, 0, 0, 1, 1)
-        self.gridLayout.addWidget(self.frame_main_body, 0, 1, 1, 1)
-        self.frame_sidebar = QtWidgets.QFrame(self.centralwidget)
-        self.frame_sidebar.setMinimumSize(QtCore.QSize(75, 0))
-        self.frame_sidebar.setMaximumSize(QtCore.QSize(75, 16777215))
-        self.frame_sidebar.setStyleSheet('background-color: black;')
-        self.frame_sidebar.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_sidebar.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_sidebar.setObjectName('frame_sidebar')
-        self.gridLayout_3 = QtWidgets.QGridLayout(self.frame_sidebar)
-        self.gridLayout_3.setContentsMargins(2, 2, 2, 2)
-        self.gridLayout_3.setHorizontalSpacing(2)
-        self.gridLayout_3.setVerticalSpacing(5)
-        self.gridLayout_3.setObjectName('gridLayout_3')
-        self.label_hide_item = QtWidgets.QLabel(self.frame_sidebar)
-        self.label_hide_item.setText('')
-        self.label_hide_item.setObjectName('label_hide_item')
-        self.gridLayout_3.addWidget(self.label_hide_item, 3, 0, 1, 1)
-        self.btn_maps = QtWidgets.QPushButton(self.frame_sidebar)
-        self.btn_maps.setStyleSheet('background-color: gray;')
-        self.btn_maps.setText('')
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(
-            QtGui.QPixmap('E:/Qt_Designer/maps_icon.png'),
-            QtGui.QIcon.Normal, QtGui.QIcon.Off,
-        )
-        self.btn_maps.setIcon(icon5)
-        self.btn_maps.setIconSize(QtCore.QSize(50, 45))
-        self.btn_maps.setObjectName('btn_maps')
-        self.gridLayout_3.addWidget(self.btn_maps, 2, 0, 1, 1)
-        self.btn_home = QtWidgets.QPushButton(self.frame_sidebar)
-        self.btn_home.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.btn_home.setStyleSheet('background-color: gray;')
-        self.btn_home.setText('')
-        icon6 = QtGui.QIcon()
-        icon6.addPixmap(
-            QtGui.QPixmap('E:/Qt_Designer/home_icon.png'),
-            QtGui.QIcon.Normal, QtGui.QIcon.Off,
-        )
-        self.btn_home.setIcon(icon6)
-        self.btn_home.setIconSize(QtCore.QSize(50, 45))
-        self.btn_home.setObjectName('btn_home')
-        self.gridLayout_3.addWidget(self.btn_home, 1, 0, 1, 1)
-        self.btn_setting = QtWidgets.QPushButton(self.frame_sidebar)
-        self.btn_setting.setStyleSheet('background-color: gray;')
-        self.btn_setting.setText('')
-        icon7 = QtGui.QIcon()
-        icon7.addPixmap(
-            QtGui.QPixmap(
-                'E:/Qt_Designer/setting_icon.png',
-            ), QtGui.QIcon.Normal, QtGui.QIcon.Off,
-        )
-        self.btn_setting.setIcon(icon7)
-        self.btn_setting.setIconSize(QtCore.QSize(50, 45))
-        self.btn_setting.setObjectName('btn_setting')
-        self.gridLayout_3.addWidget(self.btn_setting, 4, 0, 1, 1)
-        self.btn_sidebar = QtWidgets.QPushButton(self.frame_sidebar)
-        self.btn_sidebar.setStyleSheet('background-color: gray;')
-        self.btn_sidebar.setText('')
-        icon8 = QtGui.QIcon()
-        icon8.addPixmap(
-            QtGui.QPixmap(
-                'E:/Qt_Designer/sidebar_icon.png',
-            ), QtGui.QIcon.Normal, QtGui.QIcon.Off,
-        )
-        self.btn_sidebar.setIcon(icon8)
-        self.btn_sidebar.setIconSize(QtCore.QSize(50, 40))
-        self.btn_sidebar.setObjectName('btn_sidebar')
-        self.gridLayout_3.addWidget(self.btn_sidebar, 0, 0, 1, 1)
-        self.gridLayout.addWidget(self.frame_sidebar, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.frame_main_body, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -659,6 +915,14 @@ class Ui_MainWindow:
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate('MainWindow', 'MainWindow'))
+        self.btn_choose_detect.setText(_translate('MainWindow', 'Detect'))
+        self.le_detect_path.setPlaceholderText(
+            _translate('MainWindow', 'Add Path Model'),
+        )
+        self.le_segment_path.setPlaceholderText(
+            _translate('MainWindow', 'Add Path Model'),
+        )
+        self.btn_choose_segment.setText(_translate('MainWindow', 'Segment'))
         self.le_cam_path.setPlaceholderText(
             _translate('MainWindow', 'Add Path Video Here'),
         )
@@ -668,18 +932,30 @@ class Ui_MainWindow:
         self.btn_pause.setText(_translate('MainWindow', ' Pause'))
         self.btn_clear.setText(_translate('MainWindow', ' Clear'))
         self.label_input.setText(_translate('MainWindow', 'Input Image'))
-        self.label_name_result1.setText(_translate('MainWindow', 'Họ tên'))
-        self.label_born_result1.setText(_translate('MainWindow', 'Ngày sinh'))
-        self.label_HKTT_result1.setText(_translate('MainWindow', 'HKTT'))
-        self.label_class_result1.setText(_translate('MainWindow', 'Lớp'))
-        self.label_course_result1.setText(_translate('MainWindow', 'Khóa học'))
-        self.label_MSV_result1.setText(_translate('MainWindow', 'Mã SV'))
-        self.label_name_result2.setText(_translate('MainWindow', 'Họ tên'))
-        self.label_born_result2.setText(_translate('MainWindow', 'Ngày sinh'))
-        self.label_HKTT_result2.setText(_translate('MainWindow', 'HKTT'))
-        self.label_class_result2.setText(_translate('MainWindow', 'Lớp'))
-        self.label_course_result2.setText(_translate('MainWindow', 'Khóa học'))
-        self.label_MSV_result2.setText(_translate('MainWindow', 'Mã SV'))
+        self.label_result1.setText(_translate('MainWindow', 'FRAME 1'))
+        self.label_time_result1.setText(_translate('MainWindow', 'Time'))
+        self.label_height_result1.setText(
+            _translate('MainWindow', 'Chiều cao'),
+        )
+        self.label_place_result1.setText(_translate('MainWindow', 'Place'))
+        self.label_result2.setText(_translate('MainWindow', 'FRAME 2'))
+        self.label_time_result2.setText(_translate('MainWindow', 'Time'))
+        self.label_height_result2.setText(
+            _translate('MainWindow', 'Chiều cao'),
+        )
+        self.label_place_result2.setText(_translate('MainWindow', 'Place'))
+        self.label_result3.setText(_translate('MainWindow', 'FRAME 3'))
+        self.label_time_result3.setText(_translate('MainWindow', 'Time'))
+        self.label_height_result3.setText(
+            _translate('MainWindow', 'Chiều cao'),
+        )
+        self.label_place_result3.setText(_translate('MainWindow', 'Place'))
+        self.label_result4.setText(_translate('MainWindow', 'FRAME 4'))
+        self.label_time_result4.setText(_translate('MainWindow', 'Time'))
+        self.label_height_result4.setText(
+            _translate('MainWindow', 'Chiều cao'),
+        )
+        self.label_place_result4.setText(_translate('MainWindow', 'Place'))
 
 
 if __name__ == '__main__':
