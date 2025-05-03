@@ -6,7 +6,7 @@ from pydantic import HttpUrl
 from pydantic_settings import BaseSettings
 
 from .models import CardAlignSettings
-
+from .models import WriteCSVSettings
 # from .models import ChromaDB
 # from .models import PostgresSettings
 # test in local
@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     # chromadb: ChromaDB
 
     card_align: CardAlignSettings
+    write_csv: WriteCSVSettings
 
     class Config:
         env_nested_delimiter = '__'
