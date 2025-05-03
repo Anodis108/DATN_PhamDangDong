@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .box_detector import CardDetectorModel
-from .box_detector import CardDetectorModelInput
-from .box_detector import CardDetectorModelOutput
+from .box_detector import BoxDetectorModel
+from .box_detector import BoxDetectorModelInput
+from .box_detector import BoxDetectorModelOutput
 
-__all__ = ['CardDetectorModel', 'CardDetectorModelInput', 'CardDetectorModelOutput']
+__all__ = ['BoxDetectorModel', 'BoxDetectorModelInput', 'BoxDetectorModelOutput']
