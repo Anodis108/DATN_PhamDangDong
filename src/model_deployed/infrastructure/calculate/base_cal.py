@@ -8,14 +8,14 @@ from common.bases import BaseModel
 from common.bases import BaseService
 from common.logs.logs import get_logger
 from common.settings import Settings
-from mediapipe.tasks.python.vision.pose_landmarker import Landmark
+from mediapipe.tasks.python.components.containers.landmark import NormalizedLandmark
 
 logger = get_logger(__name__)
 
 
 class CalHeightInput(BaseModel):
     # Danh sách các bộ điểm pose landmarks (ví dụ: nhiều người, hoặc nhiều khung hình)
-    landmarks: List[List[Landmark]]
+    landmarks: List[List[NormalizedLandmark]]
     img_width: float                  # Chiều rộng ảnh gốc (pixel)
     img_height: float                 # Chiều cao ảnh gốc (pixel)
     px_per_cm: float                  # Tỷ lệ quy đổi pixel → cm

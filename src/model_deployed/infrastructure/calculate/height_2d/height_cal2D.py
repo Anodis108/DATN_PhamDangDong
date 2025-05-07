@@ -6,7 +6,7 @@ from typing import Tuple
 import numpy as np
 from common.logs.logs import get_logger
 from common.settings import Settings
-from mediapipe.tasks.python.vision.pose_landmarker import Landmark
+from mediapipe.tasks.python.components.containers.landmark import NormalizedLandmark
 
 from ..base_cal import CalHeight
 from ..base_cal import CalHeightInput
@@ -47,7 +47,7 @@ class CalHeight2D(CalHeight):
             diffs=diffs,
         )
 
-    def calc_img_height(self, lm: List[Landmark], img_w: float, img_h: float, px_per_cm: float) -> Tuple[float, List[float]]:
+    def calc_img_height(self, lm: List[NormalizedLandmark], img_w: float, img_h: float, px_per_cm: float) -> Tuple[float, List[float]]:
         ankle_l = lm[27]
         heel_l = lm[29]
         foot_l = lm[31]

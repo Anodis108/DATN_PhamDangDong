@@ -90,7 +90,7 @@ class BoxDetectorModel(BaseService):
         return scores, bboxes_xyxy, pixel_per_cm
 
     def nms(self, dets: np.ndarray) -> list[int]:
-        thresh = self.settings.Box_detector.conf
+        thresh = self.settings.box_detector.conf
         x1 = dets[:, 0]
         y1 = dets[:, 1]
         x2 = dets[:, 2]
