@@ -1,24 +1,23 @@
 from __future__ import annotations
 
+import cv2
 import numpy as np
 from apis.helper.exception_handler import ExceptionHandler
 from apis.helper.exception_handler import ResponseMessage
+from apis.models.pose_detector import APIOutput
 from common.logs import get_logger
 from common.utils import get_settings
 from fastapi import APIRouter
-from fastapi import Body
+from fastapi import File
 from fastapi import status
+from fastapi import UploadFile
 from fastapi.encoders import jsonable_encoder
 from infrastructure.pose_detector import PoseDetectorModel
 from infrastructure.pose_detector import PoseDetectorModelInput
-from src.model_deployed.apis.models.pose_detector import APIInput
-from src.model_deployed.apis.models.pose_detector import APIOutput
-# import cv2
 
 pose_detector = APIRouter(prefix='/v1')
 logger = get_logger(__name__)
 settings = get_settings()
-
 
 try:
     logger.info('Load mode Pose detector !!!')
@@ -29,7 +28,7 @@ except Exception as e:
 
 
 @pose_detector.post(
-    '/Pose_detector',
+    '/pose_detector',
     response_model=APIOutput,
     responses={
         status.HTTP_200_OK: {
@@ -38,37 +37,43 @@ except Exception as e:
                     'example': {
                         'message': ResponseMessage.SUCCESS,
                         'info': {
-                            'classes': ['birth', 'name'],
-                            'bboxes': [
-                                [1.0, 1.0, 1.0, 1.0],
-                                [2.0, 2.0, 2.0, 2.0],
+                            'pose_landmarks': [
+                                [
+                                    {
+                                        'x': 0.5, 'y': 0.3, 'z': 0.1,
+                                        'visibility': 0.9,
+                                    },
+                                    {
+                                        'x': 0.6, 'y': 0.4, 'z': 0.2,
+                                        'visibility': 0.8,
+                                    },
+                                ],
                             ],
-                            'confs': [1.0, 0.5],
-                            'processed_images': [
-                                [[0, 0, 0], [255, 255, 255]],
-                                [[128, 128, 128], [64, 64, 64]],
-                            ],
+                            'img_width': 640,
+                            'img_height': 480,
                         },
                     },
                 },
             },
         },
         status.HTTP_400_BAD_REQUEST: {
-            'description': 'Bad Request - message is required',
+            'description': 'Bad Request - Invalid image data',
             'content': {
                 'application/json': {
                     'example': {
                         'message': ResponseMessage.BAD_REQUEST,
+                        'error': 'Invalid image format',
                     },
                 },
             },
         },
         status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            'description': 'Internal Server Error - Error during init conversation',
+            'description': 'Internal Server Error',
             'content': {
                 'application/json': {
                     'example': {
                         'message': ResponseMessage.INTERNAL_SERVER_ERROR,
+                        'error': 'Failed to process Pose detection',
                     },
                 },
             },
@@ -79,6 +84,7 @@ except Exception as e:
                 'application/json': {
                     'example': {
                         'message': ResponseMessage.UNPROCESSABLE_ENTITY,
+                        'error': 'Unsupported image format',
                     },
                 },
             },
@@ -89,69 +95,64 @@ except Exception as e:
                 'application/json': {
                     'example': {
                         'message': ResponseMessage.NOT_FOUND,
+                        'error': 'Resource not found',
                     },
                 },
             },
         },
     },
 )
-async def pose_detect(inputs: APIInput = Body(...)):
+async def pose_detect(file: UploadFile = File(...)):
     """
-    Detects Poses in the provided image.
+    Detects Poses in the provided image file.
 
     Args:
-        inputs (APIInput): Input containing image data.
-
+        file (UploadFile): The input image file for pose detection (e.g., JPEG, PNG).
     Returns:
-        JSON response containing detected Poses and bounding boxes.
+        APIOutput: The output data containing detected pose landmarks and image dimensions.
+    Raises:
+        HTTPException: If an error occurs during pose detection processing.
     """
     exception_handler = ExceptionHandler(
         logger=logger.bind(), service_name=__name__,
     )
+    try:
+        contents = await file.read()
 
-    if inputs is None or not inputs.image:
-        return exception_handler.handle_bad_request(
-            'Invalid image data',
-            jsonable_encoder(inputs),
+        # Chuyển dữ liệu ảnh thành mảng numpy
+        nparr = np.frombuffer(contents, np.uint8)
+
+        # Giải mã ảnh thành định dạng OpenCV (BGR)
+        img_array = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        if img_array is None:
+            return exception_handler.handle_bad_request(
+                err_msg='Invalid image format',
+                extra={'file_name': file.filename},
+            )
+    except Exception as e:
+        return exception_handler.handle_exception(
+            err_msg=f'Error while reading file: {e}',
+            extra={'file_name': file.filename},
         )
 
     try:
-        logger.info('Processing Pose detection ...')
-
-        # Pose detector
+        # Process image
         response = await pose_detector_model.process(
             inputs=PoseDetectorModelInput(
-                img_processed=np.array(inputs.image, dtype=np.uint8),
+                img=img_array,
             ),
         )
-        # handle response
+
+        # Tạo kết quả APIOutput và bao bọc trong 'info'
         api_output = APIOutput(
             pose_landmarks=response.pose_landmarks,
             img_width=response.img_width,
             img_height=response.img_height,
         )
 
-        logger.info('Pose detection completed successfully.')
-
         return exception_handler.handle_success(jsonable_encoder(api_output))
-
-    except ValueError as ve:
-        return exception_handler.handle_bad_request(str(ve), jsonable_encoder(inputs))
-
-    except TypeError as te:
-        return exception_handler.handle_bad_request(str(te), jsonable_encoder(inputs))
-
-    except FileNotFoundError as fnf:
-        return exception_handler.handle_not_found_error(str(fnf), jsonable_encoder(inputs))
-
-    except RuntimeError as re:
-        return exception_handler.handle_exception(str(re), jsonable_encoder(inputs))
-
     except Exception as e:
-        logger.exception(
-            f'Exception occurred while processing Pose detection: {e}',
-        )
         return exception_handler.handle_exception(
-            'Failed to process Pose detection',
-            jsonable_encoder(inputs),
+            err_msg=f'Error during Pose detection: {e}',
+            extra={'input': file.filename},
         )

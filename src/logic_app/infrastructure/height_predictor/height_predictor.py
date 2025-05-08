@@ -28,7 +28,7 @@ class HeightPred(BaseService):
             'x': inputs.x,
         }
         response = requests.post(
-            str(self.settings.host_height_pred), json=payload,
+            str(self.settings.host_height_predictor), json=payload,
         )
 
         return HeightPredOutput(

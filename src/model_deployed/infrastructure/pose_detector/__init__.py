@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .pose_detector import TextDetectorModel
-from .pose_detector import TextDetectorModelInput
-from .pose_detector import TextDetectorModelOutput
+from .pose_detector import PoseDetectorModel
+from .pose_detector import PoseDetectorModelInput
+from .pose_detector import PoseDetectorModelOutput
 
-__all__ = ['TextDetectorModel', 'TextDetectorModelInput', 'TextDetectorModelOutput']
+__all__ = ['PoseDetectorModel', 'PoseDetectorModelInput', 'PoseDetectorModelOutput']

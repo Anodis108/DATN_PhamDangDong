@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from apis.helper.exception_handler import ExceptionHandler
 from apis.helper.exception_handler import ResponseMessage
+from apis.models.height_predictor import APIInput
+from apis.models.height_predictor import APIOutput
 from common.logs import get_logger
 from common.utils import get_settings
-from DATN_PhamDangDong.src.model_deployed.apis.models.height_predictor import APIInput
-from DATN_PhamDangDong.src.model_deployed.apis.models.height_predictor import APIOutput
 from fastapi import APIRouter
 from fastapi import Body
 from fastapi import status
@@ -19,15 +19,15 @@ settings = get_settings()
 
 # --- Load Model ---
 try:
-    logger.info('Loading height predictor model...')
-    height_pre_model = HeightPredictorModel(settings=settings)
+    logger.info('Load model Height Predictor!!!')
+    height_pre_model = HeightPredictorModel.get_service(settings=settings)
 except Exception as e:
     logger.error(f'Failed to initialize height predictor model: {e}')
     raise e
 
 
 @height_predictor.post(
-    '/height_predictor',
+    '/height_pred',
     response_model=APIOutput,
     responses={
         status.HTTP_200_OK: {

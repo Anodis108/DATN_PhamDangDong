@@ -20,11 +20,8 @@ class HeightPredictorModelOutput(BaseModel):
     pred: List[float]  # Danh sách nhiều kết quả dự đoán
 
 
-class HeightPredictorModel(ABC, BaseService):
+class HeightPredictorModel(BaseService, ABC):
     settings: Settings
-
-    def __init__(self, settings: Settings):
-        self.settings = settings
 
     @abstractmethod
     async def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
@@ -32,7 +29,7 @@ class HeightPredictorModel(ABC, BaseService):
 
     @classmethod
     def get_service(cls, settings: Settings) -> HeightPredictorModel:
-        mode = settings.height_calculator.mode.upper()
+        mode = settings.height_predictor.mode.upper()
         if mode == 'LINEAR':
             from .linear_reg import HeightPredictorModelLinear
             return HeightPredictorModelLinear(settings=settings)

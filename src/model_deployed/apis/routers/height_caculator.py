@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from apis.helper.exception_handler import ExceptionHandler
 from apis.helper.exception_handler import ResponseMessage
+from apis.models.height_calculator import APIInput
+from apis.models.height_calculator import APIOutput
 from common.logs import get_logger
 from common.utils import get_settings
 from fastapi import APIRouter
@@ -10,8 +12,6 @@ from fastapi import status
 from fastapi.encoders import jsonable_encoder
 from infrastructure.calculate import CalHeight
 from infrastructure.calculate import CalHeightInput
-from src.model_deployed.apis.models.height_calculator import APIInput
-from src.model_deployed.apis.models.height_calculator import APIOutput
 
 # import cv2
 
@@ -21,7 +21,7 @@ settings = get_settings()
 
 
 try:
-    logger.info('Load mode Cal Height !!!')
+    logger.info('Load mode Height Calculator!!!')
     height_cal_model = CalHeight.get_service(settings=settings)
 except Exception as e:
     logger.error(f'Failed to initialize embedding model: {e}')

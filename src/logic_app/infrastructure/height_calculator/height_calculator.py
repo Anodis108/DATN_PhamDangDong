@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
 from typing import List
 
 import requests  # type: ignore
@@ -14,7 +13,7 @@ logger = get_logger(__name__)
 
 
 class HeightCalInput(BaseModel):
-    landmarks: List[List[Any]]
+    landmarks: List[List[dict]]
     img_width: float
     img_height: float
     px_per_cm: float
@@ -39,7 +38,7 @@ class HeightCal(BaseService):
             'px_per_cm': inputs.px_per_cm,
         }
         response = requests.post(
-            str(self.settings.host_height_cal), json=payload,
+            str(self.settings.host_height_calculator), json=payload,
         )
 
         return HeightCalOutput(

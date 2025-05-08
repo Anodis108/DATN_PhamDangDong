@@ -10,7 +10,6 @@ from infrastructure.box_detector import BoxDetectorInput
 from infrastructure.height_calculator import HeightCal
 from infrastructure.height_calculator import HeightCalInput
 from infrastructure.height_predictor import HeightPred
-from infrastructure.height_predictor import HeightPredInput
 from infrastructure.pose_detector import PoseDetector
 from infrastructure.pose_detector import PoseDetectorInput
 
@@ -81,14 +80,16 @@ class HeightService(BaseService):
             logger.exception('Error during Height calculation.')
             raise e
 
-        # Step 4: Predict Height
-        try:
-            height_pred_out = self._get_height_pred.process(
-                inputs=HeightPredInput(x=height_cal_out.distances),
-            )
-            logger.info('Height prediction completed successfully.')
-        except Exception as e:
-            logger.exception('Error during Height prediction.')
-            raise e
+        # # Step 4: Predict Height
+        # try:
+        #     height_pred_out = self._get_height_pred.process(
+        #         inputs=HeightPredInput(x=height_cal_out.distances),
+        #     )
+        #     logger.info('Height prediction completed successfully.')
+        # except Exception as e:
+        #     logger.exception('Error during Height prediction.')
+        #     raise e
 
-        return HeightOutput(results=height_pred_out.pred)
+        # return HeightOutput(results=height_pred_out.pred)
+
+        return HeightOutput(results=height_cal_out.heights)
