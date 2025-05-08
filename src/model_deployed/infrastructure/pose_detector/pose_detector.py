@@ -25,8 +25,8 @@ class PoseDetectorModelInput(BaseModel):
 class PoseDetectorModelOutput(BaseModel):
     # Danh sách các landmarks cho từng người (List người x List điểm)
     pose_landmarks: List[List[NormalizedLandmark]]
-    img_h: float
-    img_w: float
+    img_width: float
+    img_height: float
 
 
 class PoseDetectorModel(BaseService):
@@ -50,8 +50,8 @@ class PoseDetectorModel(BaseService):
         img_h, img_w = inputs.img.shape[:2]
         return PoseDetectorModelOutput(
             pose_landmarks=pose_landmarks,
-            img_h=float(img_h),
-            img_w=float(img_w),
+            img_height=float(img_h),
+            img_width=float(img_w),
         )
 
     def forward(self, img: np.ndarray) -> List[List[NormalizedLandmark]]:

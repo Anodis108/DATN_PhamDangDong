@@ -28,16 +28,14 @@ class CalHeightOutput(BaseModel):
     distances: List[List[float]]
     # Chiều cao tính trực tiếp (tổng đoạn) sau khi quy đổi ra cm
     cm_direct: List[float]
-    cm_sum: List[float]          # Tổng các đoạn cơ thể sau khi quy đổi ra cm
+    # Tổng các đoạn cơ thể sau khi quy đổi ra cm
+    cm_sum: List[float]
     # Sai số giữa chiều cao trực tiếp và tổng từng đoạn (cm)
     diffs: List[float]
 
 
-class CalHeight(ABC, BaseService):
+class CalHeight(BaseService, ABC):
     settings: Settings
-
-    def __init__(self, settings: Settings):
-        self.settings = settings
 
     @abstractmethod
     async def process(self, inputs: CalHeightInput) -> CalHeightOutput:

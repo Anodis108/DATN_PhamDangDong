@@ -5,23 +5,18 @@ from dotenv import load_dotenv
 from pydantic import HttpUrl
 from pydantic_settings import BaseSettings
 
-from .models import CardAlignSettings
 from .models import WriteCSVSettings
-# from .models import ChromaDB
-# from .models import PostgresSettings
+
 # test in local
 load_dotenv(find_dotenv('.env'), override=True)
 
 
 class Settings(BaseSettings):
-    host_card_detector: HttpUrl
-    host_text_detector: HttpUrl
-    host_text_ocr: HttpUrl
+    host_box_detector: HttpUrl
+    host_pose_detector: HttpUrl
+    host_height_calculator: HttpUrl
+    host_height_predictor: HttpUrl
 
-    # postgres: PostgresSettings
-    # chromadb: ChromaDB
-
-    card_align: CardAlignSettings
     write_csv: WriteCSVSettings
 
     class Config:

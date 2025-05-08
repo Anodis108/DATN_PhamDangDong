@@ -44,8 +44,8 @@ class TestPoseDetector(unittest.TestCase):
                 ]
                 for person_landmarks in outputs.pose_landmarks
             ],
-            'img_h': outputs.img_h,
-            'img_w': outputs.img_w,
+            'img_h': outputs.img_height,
+            'img_w': outputs.img_width,
         }
 
         # In ra kết quả dưới dạng JSON
@@ -54,7 +54,7 @@ class TestPoseDetector(unittest.TestCase):
         # Kiểm tra nếu có landmarks và in thông tin
         if len(outputs.pose_landmarks) > 0:
             print(
-                f'Image dimensions: {outputs.img_w:.1f}x{outputs.img_h:.1f} pixels',
+                f'Image dimensions: {outputs.img_width:.1f}x{outputs.img_height:.1f} pixels',
             )
             for person_landmarks in outputs.pose_landmarks:
                 for landmark in person_landmarks:

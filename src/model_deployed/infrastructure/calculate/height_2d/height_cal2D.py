@@ -143,10 +143,4 @@ class CalHeight2D(CalHeight):
         cm_s = sum(d / px_per_cm for d in distances)
         diff = abs(cm_dir - cm_s)
 
-        logger.info('=== So sánh chiều cao ===')
-        logger.info(f'cm_dir: {cm_dir:.2f} cm')
-        logger.info(f'cm_sum: {cm_s:.2f} cm')
-        logger.info(f'Chênh lệch: {diff:.4f} cm')
-        logger.info('✅ Gần giống' if diff < 1e-2 else '⚠️ Khác nhau')
-
         return cm_dir, cm_s, diff

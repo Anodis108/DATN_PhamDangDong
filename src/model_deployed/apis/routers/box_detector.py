@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 from apis.helper.exception_handler import ExceptionHandler
 from apis.helper.exception_handler import ResponseMessage
+from apis.models.box_detector import APIOutput
 from common.logs import get_logger
 from common.utils import get_settings
 from fastapi import APIRouter
@@ -13,7 +14,6 @@ from fastapi import UploadFile
 from fastapi.encoders import jsonable_encoder
 from infrastructure.box_detector import BoxDetectorModel
 from infrastructure.box_detector import BoxDetectorModelInput
-from src.model_deployed.apis.models.box_detector import APIOutput
 
 box_detector = APIRouter(prefix='/v1')
 logger = get_logger(__name__)

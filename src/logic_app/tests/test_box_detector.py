@@ -13,7 +13,7 @@ class TestCardDetector(unittest.TestCase):
     def setUp(self) -> None:
         self.settings = get_settings()
         self.card_detector = CardDetector(settings=self.settings)
-        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_LuThiSen/resource/data/demo_data_card/LuThihSen3.jpg'
+        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
 
     def test_api_card_detection(self):
         test_image = cv2.imread(self.img_path)

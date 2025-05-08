@@ -1,27 +1,17 @@
 from __future__ import annotations
 
-import asyncio
 import json
 import unittest
-from unittest.mock import patch
 
-from common import get_settings
-from infrastructure.calculate.base_cal import CalHeight
-from infrastructure.calculate.base_cal import CalHeightInput
+import requests  # type: ignore
 from mediapipe.tasks.python.components.containers.landmark import NormalizedLandmark
 
 
-class TestCalHeight2D(unittest.TestCase):
-
+class TestHeightCalculatorAPI(unittest.TestCase):
     def setUp(self) -> None:
-        # Lấy settings từ hàm get_settings()
-        self.settings = get_settings()
-        # Khởi tạo đối tượng CalHeight2D
-        self.cal_height_model = CalHeight.get_service(settings=self.settings)
-
-    def test_cal_height_2d(self):
-        # Tạo dữ liệu landmarks từ example
-        landmarks = [
+        """Cài đặt ban đầu"""
+        self.api_url = 'http://localhost:5000/v1/height_cal'
+        self.landmarks = [[
             NormalizedLandmark(
                 x=0.55864018201828,
                 y=0.28672096133232117, z=-0.42271214723587036,
@@ -59,19 +49,21 @@ class TestCalHeight2D(unittest.TestCase):
                 y=0.2794104218482971, z=-0.08924071490764618,
             ),
             NormalizedLandmark(
-                x=0.5821019411087036, y=0.302212119102478, z=-0.3745553195476532,
-            ),  # mouth_right
+                x=0.5821019411087036,
+                y=0.302212119102478, z=-0.3745553195476532,
+            ),
             NormalizedLandmark(
-                x=0.5599366426467896, y=0.30495017766952515, z=-0.3179229497909546,
-            ),  # mouth_left
+                x=0.5599366426467896,
+                y=0.30495017766952515, z=-0.3179229497909546,
+            ),
             NormalizedLandmark(
-                x=0.6929395794868469, y=0.3739490807056427,
-                z=-0.3338164985179901,
-            ),  # shoulder_left
+                x=0.6929395794868469,
+                y=0.3739490807056427, z=-0.3338164985179901,
+            ),
             NormalizedLandmark(
-                x=0.5317705273628235, y=0.38431963324546814,
-                z=0.1599603146314621,
-            ),  # shoulder_right
+                x=0.5317705273628235,
+                y=0.38431963324546814, z=0.1599603146314621,
+            ),
             NormalizedLandmark(
                 x=0.6917884349822998,
                 y=0.49635210633277893, z=-0.42108044028282166,
@@ -113,32 +105,37 @@ class TestCalHeight2D(unittest.TestCase):
                 y=0.603217601776123, z=-0.09428758919239044,
             ),
             NormalizedLandmark(
-                x=0.6423527598381042, y=0.6118481159210205, z=-0.16938163340091705,
-            ),  # hip_left
+                x=0.6423527598381042,
+                y=0.6118481159210205, z=-0.16938163340091705,
+            ),
             NormalizedLandmark(
-                x=0.5516496896743774, y=0.6091470122337341, z=0.16916398704051971,
-            ),  # hip_right
+                x=0.5516496896743774,
+                y=0.6091470122337341, z=0.16916398704051971,
+            ),
             NormalizedLandmark(
-                x=0.6469278931617737, y=0.7799736261367798, z=-0.11441945284605026,
-            ),  # knee_left
+                x=0.6469278931617737,
+                y=0.7799736261367798, z=-0.11441945284605026,
+            ),
             NormalizedLandmark(
                 x=0.5763688087463379,
                 y=0.7626259922981262, z=0.3816165626049042,
             ),
             NormalizedLandmark(
-                x=0.6446341276168823, y=0.918790340423584, z=0.197114959359169,
-            ),  # ankle_left
+                x=0.6446341276168823,
+                y=0.918790340423584, z=0.197114959359169,
+            ),
             NormalizedLandmark(
                 x=0.5966443419456482,
                 y=0.8795374035835266, z=0.7457952499389648,
             ),
             NormalizedLandmark(
-                x=0.6518265604972839, y=0.9326217770576477, z=0.21476362645626068,
-            ),  # heel_left
+                x=0.6518265604972839,
+                y=0.9326217770576477, z=0.21476362645626068,
+            ),
             NormalizedLandmark(
-                x=0.6203647255897522, y=0.9024173617362976,
-                z=0.7743319272994995,
-            ),  # foot_index_left
+                x=0.6203647255897522,
+                y=0.9024173617362976, z=0.7743319272994995,
+            ),
             NormalizedLandmark(
                 x=0.6165841221809387,
                 y=0.9801462292671204, z=-0.014705762267112732,
@@ -147,44 +144,70 @@ class TestCalHeight2D(unittest.TestCase):
                 x=0.5079806447029114,
                 y=0.9112303853034973, z=0.6286630630493164,
             ),
+        ]]
+        self.img_width = 259.0
+        self.img_height = 194.0
+        self.px_per_cm = 1.0443975730020492
+
+    def test_height_cal_input_output(self):
+        """Test Height Calculator API input và output"""
+        # Chuyển NormalizedLandmark thành dictionary
+        serialized_landmarks = [
+            [
+                {'x': lm.x, 'y': lm.y, 'z': lm.z} for lm in landmarks
+            ] for landmarks in self.landmarks
         ]
 
-        # Tạo đối tượng input
-        inputs = CalHeightInput(
-            landmarks=[landmarks],
-            img_width=259.0,
-            img_height=194.0,
-            px_per_cm=1.0443975730020492,
-        )
-
-        # Kiểm tra phương thức process
-        with patch('infrastructure.calculate.height_2d.height_cal2D.logger'):
-            outputs = asyncio.run(self.cal_height_model.process(inputs))
-
-        # Chuẩn bị dữ liệu đầu ra dưới dạng dictionary
-        result = {
-            'heights': outputs.heights,
-            'distances': outputs.distances,
-            'cm_direct': outputs.cm_direct,
-            'cm_sum': outputs.cm_sum,
-            'diffs': outputs.diffs,
+        payload = {
+            'landmarks': serialized_landmarks,
+            'img_width': self.img_width,
+            'img_height': self.img_height,
+            'px_per_cm': self.px_per_cm,
         }
 
-        # In kết quả dưới dạng JSON
-        print(json.dumps(result, indent=4))
+        response = requests.post(self.api_url, json=payload)
 
-        # Kiểm tra nếu có kết quả và in thông tin
-        if len(outputs.heights) > 0:
-            for i, height in enumerate(outputs.heights):
-                print(f'Person {i + 1}:')
-                print(f'  Height (cm): {outputs.cm_direct[i]:.2f}')
-                print(f'  Sum of segments (cm): {outputs.cm_sum[i]:.2f}')
-                print(f'  Difference (cm): {outputs.diffs[i]:.4f}')
-                print(
-                    f"  Body segments (pixels): {[f'{d:.2f}' for d in outputs.distances[i]]}",
-                )
-        else:
-            print('No height calculations performed.')
+        self.assertEqual(
+            response.status_code, 200,
+            f'Expected status code 200, got {response.status_code}: {response.text}',
+        )
+
+        try:
+            response_json = response.json()
+            print(
+                'Response JSON:', json.dumps(
+                    response_json, indent=4, ensure_ascii=False,
+                ),
+            )
+        except json.JSONDecodeError:
+            self.fail(f'Response is not valid JSON: {response.text}')
+
+        self.assertIn(
+            'message', response_json,
+            "Missing 'message' in response",
+        )
+        self.assertEqual(
+            response_json['message'], 'Process successfully !!!',
+            "Expected 'Process successfully !!!' message",
+        )
+        self.assertIn('info', response_json, "Missing 'info' in response")
+
+        info = response_json['info']
+        for field in ['heights', 'distances', 'cm_direct', 'cm_sum', 'diffs']:
+            self.assertIn(field, info, f"Missing '{field}' in info")
+            self.assertIsInstance(
+                info[field], list, f"'{field}' is not a list",
+            )
+
+        self.assertGreaterEqual(
+            len(info['heights']), 1, "'heights' list is empty",
+        )
+        for field in ['distances', 'cm_direct', 'cm_sum', 'diffs']:
+            self.assertEqual(
+                len(info[field]), len(
+                    info['heights'],
+                ), f"'{field}' length does not match 'heights'",
+            )
 
 
 if __name__ == '__main__':
