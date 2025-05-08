@@ -5,10 +5,8 @@ import os
 from datetime import datetime
 from queue import Queue
 
-import cv2
 import numpy as np
 from common.utils import get_settings
-from network.call_api import APICaller
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
@@ -17,6 +15,7 @@ from PyQt5.QtCore import QObject
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QLabel
+from thread import ThreadWork
 from uis.main_window import Ui_MainWindow
 
 from .utils import ImageUtils
@@ -45,6 +44,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.le_cam_path.setText(self.camera_path)
         self.ui.label_avatar.setPixmap(QPixmap(settings.app.img_logo_path))
         self.connect_signals()
+
+        # Khởi tạo thread_work
+        self.thread_work = None
 
     def connect_signals(self):
         self.ui.btn_choose_path.clicked.connect(self.choose_path_img)
@@ -98,47 +100,40 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.capture_queue = Queue()
         self.stream_queue = Queue()
-        self.callapi = APICaller()
-        self.img_utils = ImageUtils()
 
-        if self.is_video or self.image_path == '0':
-            self.run_video_stream()
-        else:
-            self.run_image_processing()
-
-    def run_image_processing(self):
-        image = cv2.imread(self.image_path)
-        if image is None:
-            logging.warning('Không đọc được ảnh.')
-            QtWidgets.QMessageBox.warning(
-                self, 'Error', 'Failed to load image.',
-            )
-            return
-
-        # Chuyển đổi màu và hiển thị
-        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        self.display_image_on_label(self.ui.label_input, image_rgb)
-        save_img_path = self.img_utils.save_img(image, settings.app.save_dir)
-        self.response = self.callapi.call_api(
-            settings.host_height_service, image,
+        # Tạo và chạy ThreadWork
+        self.thread_work = ThreadWork(self.image_path, self.is_video)
+        self.thread_work.image_processed.connect(self.on_image_processed)
+        self.thread_work.video_frame_processed.connect(
+            self.on_video_frame_processed,
         )
-        self.display_results(image_rgb, 'HaUI', self.response, save_img_path)
+        self.thread_work.error_occurred.connect(self.on_error_occurred)
+        self.thread_work.finished.connect(self.on_thread_finished)
+        self.thread_work.start()
 
-    def run_video_stream(self):
-        self.video_capture = cv2.VideoCapture(self.image_path)
-        self.timer.timeout.connect(self.read_video_frame)
-        self.timer.start(30)
+        # Nếu là video, bắt đầu timer để xử lý khung hình
+        if self.is_video or self.image_path == '0':
+            self.timer.timeout.connect(self.thread_work.process_video_frame)
+            self.timer.start(30)
 
-    def read_video_frame(self):
-        if self.video_capture.isOpened():
-            ret, frame = self.video_capture.read()
-            if ret:
-                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                self.display_image_on_label(self.ui.label_input, rgb_frame)
-            else:
-                self.timer.stop()
-                self.video_capture.release()
-                logging.info('Đã đọc hết video.')
+    def on_image_processed(self, image_rgb, place, response, save_img_path):
+        # Hiển thị ảnh lên UI
+        self.display_image_on_label(self.ui.label_input, image_rgb)
+        self.display_results(image_rgb, place, response, save_img_path)
+
+    def on_video_frame_processed(self, rgb_frame):
+        # Hiển thị khung hình video
+        self.display_image_on_label(self.ui.label_input, rgb_frame)
+
+    def on_error_occurred(self, error_message):
+        QtWidgets.QMessageBox.warning(self, 'Error', error_message)
+
+    def on_thread_finished(self):
+        if self.timer.isActive():
+            self.timer.stop()
+        if self.thread_work:
+            self.thread_work.stop()
+            self.thread_work = None
 
     def pause(self):
         if self.timer.isActive():
@@ -155,16 +150,6 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self.ui.label_place_result1.setText(place)
         self.ui.label_height_result1.setText(str(height))
-
-        # Lưu dữ liệu vào Excel
-        self.img_utils.save_to_excel(
-            {
-                'place': place,
-                'height': height,
-                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                'image_path': save_img_path,
-            }, 'detection_data.xlsx',
-        )
 
     def update_results(self, mode: str = 'push'):
         label_img_results = [
@@ -221,6 +206,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if isinstance(obj, QLabel) and event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
             path = obj.property('img_path')
             if path:
+                self.img_utils = ImageUtils()  # Khởi tạo ImageUtils nếu cần
                 self.img_utils.show_image_window(path)
             return True
         return super().eventFilter(obj, event)
