@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from .chromadb import ChromaDB
-from .pg import PostgresSettings
+from .app_settings import AppSettings
 
-__all__=['PostgresSettings', 'ChromaDB']
+__all__=['AppSettings']

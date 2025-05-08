@@ -84,128 +84,12 @@ class Ui_MainWindow:
         self.label_avatar.setObjectName('label_avatar')
         self.horizontalLayout_5.addWidget(self.label_avatar)
         self.verticalLayout_6.addWidget(self.frame_avatar)
-        self.frame_2 = QtWidgets.QFrame(self.fr_main_functions)
-        self.frame_2.setStyleSheet(
-            'QFrame#frame_2\n'
-            '{\n'
-            '    color: white;\n'
-            '    border-radius: 15px; \n'
-            '    border: 2px solid white;\n'
-            '}\n'
-            '',
-        )
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName('frame_2')
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.frame_2)
-        self.verticalLayout_2.setObjectName('verticalLayout_2')
-        self.frame_3 = QtWidgets.QFrame(self.frame_2)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName('frame_3')
-        self.gridLayout_7 = QtWidgets.QGridLayout(self.frame_3)
-        self.gridLayout_7.setObjectName('gridLayout_7')
-        self.btn_choose_detect = QtWidgets.QPushButton(self.frame_3)
-        self.btn_choose_detect.setMinimumSize(QtCore.QSize(80, 31))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(True)
-        font.setWeight(75)
-        self.btn_choose_detect.setFont(font)
-        self.btn_choose_detect.setStyleSheet(
-            'QPushButton#btn_choose_detect\n'
-            '{\n'
-            '   background-color: rgba(255,255,255,0.4);\n'
-            '    color: white;\n'
-            '    border-radius: 5px; \n'
-            '    border: 2px solid white;\n'
-            '}\n'
-            'QPushButton:hover#btn_choose_detect\n'
-            '{\n'
-            '   background-color: orange\n'
-            '}\n'
-            'QPushButton:pressed#btn_choose_detect\n'
-            '{\n'
-            '    background-color: white;\n'
-            '    color: black;\n'
-            '    padding-left: 5px;\n'
-            '    padding-top: 5px;\n'
-            '}\n'
-            '',
-        )
-        self.btn_choose_detect.setObjectName('btn_choose_detect')
-        self.gridLayout_7.addWidget(self.btn_choose_detect, 0, 0, 1, 1)
-        self.le_detect_path = QtWidgets.QLineEdit(self.frame_3)
-        self.le_detect_path.setMinimumSize(QtCore.QSize(0, 31))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.le_detect_path.setFont(font)
-        self.le_detect_path.setStyleSheet(
-            'background: rgba(255,255,255,0.95);\n'
-            'border: 2px solid white;',
-        )
-        self.le_detect_path.setReadOnly(True)
-        self.le_detect_path.setObjectName('le_detect_path')
-        self.gridLayout_7.addWidget(self.le_detect_path, 0, 1, 1, 1)
-        self.verticalLayout_2.addWidget(self.frame_3)
-        self.frame = QtWidgets.QFrame(self.frame_2)
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName('frame')
-        self.gridLayout_8 = QtWidgets.QGridLayout(self.frame)
-        self.gridLayout_8.setObjectName('gridLayout_8')
-        self.le_segment_path = QtWidgets.QLineEdit(self.frame)
-        self.le_segment_path.setMinimumSize(QtCore.QSize(0, 31))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(False)
-        font.setWeight(50)
-        self.le_segment_path.setFont(font)
-        self.le_segment_path.setStyleSheet(
-            'background: rgba(255,255,255,0.95);\n'
-            'border: 2px solid white;',
-        )
-        self.le_segment_path.setReadOnly(True)
-        self.le_segment_path.setObjectName('le_segment_path')
-        self.gridLayout_8.addWidget(self.le_segment_path, 0, 1, 1, 1)
-        self.btn_choose_segment = QtWidgets.QPushButton(self.frame)
-        self.btn_choose_segment.setMinimumSize(QtCore.QSize(80, 31))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        font.setBold(True)
-        font.setWeight(75)
-        self.btn_choose_segment.setFont(font)
-        self.btn_choose_segment.setStyleSheet(
-            'QPushButton#btn_choose_segment\n'
-            '{\n'
-            '   background-color: rgba(255,255,255,0.4);\n'
-            '    color: white;\n'
-            '    border-radius: 5px; \n'
-            '    border: 2px solid white;\n'
-            '}\n'
-            'QPushButton:hover#btn_choose_segment\n'
-            '{\n'
-            '   background-color: orange\n'
-            '}\n'
-            'QPushButton:pressed#btn_choose_segment\n'
-            '{\n'
-            '    background-color: white;\n'
-            '    color: black;\n'
-            '    padding-left: 5px;\n'
-            '    padding-top: 5px;\n'
-            '}\n'
-            '',
-        )
-        self.btn_choose_segment.setObjectName('btn_choose_segment')
-        self.gridLayout_8.addWidget(self.btn_choose_segment, 0, 0, 1, 1)
-        self.verticalLayout_2.addWidget(self.frame)
-        self.verticalLayout_6.addWidget(self.frame_2)
         self.frame_file_path = QtWidgets.QFrame(self.fr_main_functions)
         self.frame_file_path.setStyleSheet(
             'QFrame#frame_file_path\n'
             '{\n'
             '    color: white;\n'
-            '    border-radius: 15px; \n'
+            '    border-radius: 15px;\n'
             '    border: 2px solid white;\n'
             '}\n'
             '',
@@ -253,7 +137,7 @@ class Ui_MainWindow:
             '{\n'
             '   background-color: rgba(255,255,255,0.4);\n'
             '    color: white;\n'
-            '    border-radius: 5px; \n'
+            '    border-radius: 5px;\n'
             '    border: 2px solid white;\n'
             '}\n'
             'QPushButton:hover#btn_choose_path\n'
@@ -284,7 +168,7 @@ class Ui_MainWindow:
             'QFrame#frame_buttons\n'
             '{\n'
             '    color: white;\n'
-            '    border-radius: 15px; \n'
+            '    border-radius: 15px;\n'
             '    border: 2px solid white;\n'
             '}\n'
             '',
@@ -312,7 +196,7 @@ class Ui_MainWindow:
             '{\n'
             '    background-color: rgba(255, 255, 255, 0.4);\n'
             '    color: white;\n'
-            '    border-radius: 15px; \n'
+            '    border-radius: 15px;\n'
             '    border: 2px solid white;\n'
             '}\n'
             'QPushButton:hover#btn_start\n'
@@ -349,7 +233,7 @@ class Ui_MainWindow:
             '{\n'
             '   background-color: rgba(255, 255, 255, 0.4);\n'
             '    color: white;\n'
-            '    border-radius: 15px; \n'
+            '    border-radius: 15px;\n'
             '    border: 2px solid white;\n'
             '}\n'
             'QPushButton:hover#btn_link_cam\n'
@@ -392,7 +276,7 @@ class Ui_MainWindow:
             '{\n'
             '    background-color: rgba(255, 255, 255, 0.4);\n'
             '    color: white;\n'
-            '    border-radius: 15px; \n'
+            '    border-radius: 15px;\n'
             '    border: 2px solid white;\n'
             '}\n'
             'QPushButton:hover#btn_pause\n'
@@ -429,7 +313,7 @@ class Ui_MainWindow:
             '{\n'
             '   background-color: rgba(255, 255, 255, 0.4);\n'
             '    color: white;\n'
-            '    border-radius: 15px; \n'
+            '    border-radius: 15px;\n'
             '    border: 2px solid white;\n'
             '}\n'
             'QPushButton:hover#btn_clear\n'
@@ -497,7 +381,7 @@ class Ui_MainWindow:
         self.widget_result1 = QtWidgets.QWidget(self.frame_output)
         self.widget_result1.setStyleSheet(
             'color: white;\n'
-            'border-radius: 15px; \n'
+            'border-radius: 15px;\n'
             'border: 2px solid lightgray;',
         )
         self.widget_result1.setObjectName('widget_result1')
@@ -594,7 +478,7 @@ class Ui_MainWindow:
         self.horizontalLayout_9.addWidget(self.widget_result1)
         self.widget_result2 = QtWidgets.QWidget(self.frame_output)
         self.widget_result2.setStyleSheet(
-            'border-radius: 15px; \n'
+            'border-radius: 15px;\n'
             'border: 2px solid lightgray;',
         )
         self.widget_result2.setObjectName('widget_result2')
@@ -692,7 +576,7 @@ class Ui_MainWindow:
         self.widget_result3 = QtWidgets.QWidget(self.frame_output)
         self.widget_result3.setStyleSheet(
             'color: white;\n'
-            'border-radius: 15px; \n'
+            'border-radius: 15px;\n'
             'border: 2px solid lightgray;',
         )
         self.widget_result3.setObjectName('widget_result3')
@@ -788,7 +672,7 @@ class Ui_MainWindow:
         self.widget_result4 = QtWidgets.QWidget(self.frame_output)
         self.widget_result4.setStyleSheet(
             'color: white;\n'
-            'border-radius: 15px; \n'
+            'border-radius: 15px;\n'
             'border: 2px solid lightgray;',
         )
         self.widget_result4.setObjectName('widget_result4')
@@ -915,14 +799,6 @@ class Ui_MainWindow:
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate('MainWindow', 'MainWindow'))
-        self.btn_choose_detect.setText(_translate('MainWindow', 'Detect'))
-        self.le_detect_path.setPlaceholderText(
-            _translate('MainWindow', 'Add Path Model'),
-        )
-        self.le_segment_path.setPlaceholderText(
-            _translate('MainWindow', 'Add Path Model'),
-        )
-        self.btn_choose_segment.setText(_translate('MainWindow', 'Segment'))
         self.le_cam_path.setPlaceholderText(
             _translate('MainWindow', 'Add Path Video Here'),
         )
