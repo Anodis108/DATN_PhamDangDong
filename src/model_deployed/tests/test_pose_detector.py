@@ -20,8 +20,11 @@ class TestPoseDetector(unittest.TestCase):
         # Thay thế bằng đường dẫn ảnh của bạn
         image_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
         img = cv2.imread(image_path)
+        self.assertIsNotNone(
+            img, 'Không thể đọc được ảnh từ đường dẫn cung cấp',
+        )
 
-        # Kiểm tra giá trị pixel đầu tiên (tại vị trí 0,0)
+        # Kiểm tra định dạng ảnh
         b, g, r = img[0, 0]
         if b != r:
             print('Ảnh đang ở định dạng BGR')
@@ -36,14 +39,7 @@ class TestPoseDetector(unittest.TestCase):
 
         # Chuẩn bị dữ liệu đầu ra dưới dạng dictionary để in ra JSON
         result = {
-            'pose_landmarks': [
-                [
-                    # Sử dụng các thuộc tính của NormalizedLandmark
-                    {'x': landmark.x, 'y': landmark.y, 'z': landmark.z}
-                    for landmark in person_landmarks
-                ]
-                for person_landmarks in outputs.pose_landmarks
-            ],
+            'pose_landmarks': outputs.pose_landmarks,
             'img_h': outputs.img_height,
             'img_w': outputs.img_width,
         }
@@ -60,7 +56,7 @@ class TestPoseDetector(unittest.TestCase):
                 for landmark in person_landmarks:
                     # In ra thông tin landmarks
                     print(
-                        f'Landmark: ({landmark.x}, {landmark.y}, {landmark.z})',
+                        f'Landmark: x={landmark["x"]:.3f}, y={landmark["y"]:.3f}, z={landmark["z"]:.3f}',
                     )
         else:
             print('Không phát hiện landmarks nào.')
@@ -70,12 +66,17 @@ class TestPoseDetector(unittest.TestCase):
             for landmark in person_landmarks:
                 # Quy đổi to pixel
                 x, y = int(
-                    landmark.x * img.shape[1],
-                ), int(landmark.y * img.shape[0])
+                    landmark['x'] * img.shape[1],
+                ), int(landmark['y'] * img.shape[0])
                 cv2.circle(img, (x, y), 5, (0, 255, 0), -1)  # Vẽ điểm landmark
 
         # Lưu ảnh kết quả
-        cv2.imwrite('output_pose_landmarks.png', img)
+        output_path = 'output_pose_landmarks.png'
+        cv2.imwrite(output_path, img)
+        self.assertTrue(
+            cv2.imread(output_path) is not None,
+            'Không thể lưu ảnh kết quả',
+        )
 
 
 if __name__ == '__main__':

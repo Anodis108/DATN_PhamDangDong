@@ -36,14 +36,22 @@ except Exception as e:
                 'application/json': {
                     'example': {
                         'message': ResponseMessage.SUCCESS,
-                        'pose_landmarks': [
-                            [
-                                {'x': 0.5, 'y': 0.3, 'z': 0.1, 'visibility': 0.9},
-                                {'x': 0.6, 'y': 0.4, 'z': 0.2, 'visibility': 0.8},
+                        'info': {
+                            'pose_landmarks': [
+                                [
+                                    {
+                                        'x': 0.5, 'y': 0.3, 'z': 0.1,
+                                        'visibility': 0.9,
+                                    },
+                                    {
+                                        'x': 0.6, 'y': 0.4, 'z': 0.2,
+                                        'visibility': 0.8,
+                                    },
+                                ],
                             ],
-                        ],
-                        'img_width': 640,
-                        'img_height': 480,
+                            'img_width': 640,
+                            'img_height': 480,
+                        },
                     },
                 },
             },
@@ -105,7 +113,6 @@ async def pose_detect(file: UploadFile = File(...)):
     Raises:
         HTTPException: If an error occurs during pose detection processing.
     """
-    # Validate input parameters
     exception_handler = ExceptionHandler(
         logger=logger.bind(), service_name=__name__,
     )
@@ -135,18 +142,14 @@ async def pose_detect(file: UploadFile = File(...)):
                 img=img_array,
             ),
         )
-        serialized_landmarks = [
-            [
-                {'x': lm.x, 'y': lm.y, 'z': lm.z} for lm in landmarks
-            ] for landmarks in response.pose_landmarks
-        ]
 
-        # Handle response
+        # Tạo kết quả APIOutput và bao bọc trong 'info'
         api_output = APIOutput(
-            pose_landmarks=serialized_landmarks,
+            pose_landmarks=response.pose_landmarks,
             img_width=response.img_width,
             img_height=response.img_height,
         )
+
         return exception_handler.handle_success(jsonable_encoder(api_output))
     except Exception as e:
         return exception_handler.handle_exception(

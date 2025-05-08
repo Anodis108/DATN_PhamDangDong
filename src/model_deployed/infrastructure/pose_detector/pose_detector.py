@@ -24,7 +24,7 @@ class PoseDetectorModelInput(BaseModel):
 
 class PoseDetectorModelOutput(BaseModel):
     # Danh sách các landmarks cho từng người (List người x List điểm)
-    pose_landmarks: List[List[NormalizedLandmark]]
+    pose_landmarks: List[List[dict]]
     img_width: float
     img_height: float
 
@@ -47,9 +47,15 @@ class PoseDetectorModel(BaseService):
     async def process(self, inputs: PoseDetectorModelInput) -> PoseDetectorModelOutput:
         # Gọi forward để trích xuất pose landmarks
         pose_landmarks = self.forward(inputs.img)
+        serialized_landmarks = [
+            [
+                {'x': lm.x, 'y': lm.y, 'z': lm.z} for lm in landmarks
+            ] for landmarks in pose_landmarks
+        ]
+
         img_h, img_w = inputs.img.shape[:2]
         return PoseDetectorModelOutput(
-            pose_landmarks=pose_landmarks,
+            pose_landmarks=serialized_landmarks,
             img_height=float(img_h),
             img_width=float(img_w),
         )

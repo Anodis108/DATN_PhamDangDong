@@ -39,15 +39,6 @@ class TestPoseDetectorAPI(unittest.TestCase):
         except json.JSONDecodeError:
             self.fail(f'Response is not a valid JSON: {response.text}')
 
-        # # # Kiểm tra định dạng dữ liệu trả về
-        # self.assertIn('pose_landmarks', json_data, "Missing 'pose_landmarks' in response")
-        # self.assertIn('img_width', json_data, "Missing 'img_width' in response")
-        # self.assertIn('img_height', json_data, "Missing 'img_height' in response")
-
-        # self.assertIsInstance(json_data['pose_landmarks'], list, "'pose_landmarks' is not a list")
-        # self.assertIsInstance(json_data['img_width'], (int, float), "'img_width' is not a number")
-        # self.assertIsInstance(json_data['img_height'], (int, float), "'img_height' is not a number")
-
 
 if __name__ == '__main__':
     unittest.main()

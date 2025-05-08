@@ -15,7 +15,7 @@ class TestBoxDetector(unittest.TestCase):
         self.settings = get_settings()
         self.box_detector_model = BoxDetectorModel(settings=self.settings)
 
-    def test_detect(self):
+    def test_box_detect(self):
         image_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
         img = cv2.imread(image_path)
 
