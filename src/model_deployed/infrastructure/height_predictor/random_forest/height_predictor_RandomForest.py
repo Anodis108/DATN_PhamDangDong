@@ -12,7 +12,6 @@ from sklearn.ensemble import RandomForestRegressor
 from ..base_pred import HeightPredictorModel
 from ..base_pred import HeightPredictorModelInput
 from ..base_pred import HeightPredictorModelOutput
-# ✅ Sử dụng mô hình Random Forest
 
 logger = get_logger(__name__)
 
