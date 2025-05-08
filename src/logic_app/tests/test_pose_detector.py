@@ -1,0 +1,34 @@
+from __future__ import annotations
+
+import json
+import unittest
+
+import cv2
+from common.utils import get_settings
+from fastapi.encoders import jsonable_encoder
+from infrastructure.pose_detector import PoseDetector
+from infrastructure.pose_detector import PoseDetectorInput
+
+
+class TestPoseDetector(unittest.TestCase):
+    def setUp(self) -> None:
+        self.settings = get_settings()
+        self.pose_detector = PoseDetector(settings=self.settings)
+        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
+
+    def test_api_pose_detection(self):
+        test_image = cv2.imread(self.img_path)
+        print('Image shape:', test_image.shape, 'dtype:', test_image.dtype)
+
+        inputs = PoseDetectorInput(img_origin=test_image)
+        result = self.pose_detector.process(inputs=inputs)
+
+        # Chuyển đổi result thành JSON hợp lệ
+        json_result = jsonable_encoder(result)
+
+        # Chuyển đổi thành chuỗi JSON và in ra
+        print(json.dumps(json_result, indent=4))
+
+
+if __name__ == '__main__':
+    unittest.main()

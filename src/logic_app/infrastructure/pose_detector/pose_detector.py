@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from io import BytesIO
+
+import cv2
 import numpy as np
 import requests  # type: ignore
 from common.bases import BaseModel
 from common.bases import BaseService
 from common.settings import Settings
-from mediapipe.tasks.python.vision.pose_landmarker import Landmark
 
 # from io import BytesIO
 # import cv2
@@ -16,7 +18,7 @@ class PoseDetectorInput(BaseModel):
 
 
 class PoseDetectorOutput(BaseModel):
-    pose_landmarks: list[list[Landmark]]
+    pose_landmarks: list[list[dict]]
     img_width: float
     img_height: float
 
@@ -25,11 +27,12 @@ class PoseDetector(BaseService):
     settings: Settings
 
     def process(self, inputs: PoseDetectorInput) -> PoseDetectorOutput:
-        payload = {
-            'image': inputs.img_origin.tolist(),
-        }
+        _, buffer = cv2.imencode('.jpg', inputs.img_origin)
+        file_bytes = BytesIO(buffer.tobytes())
+        file_bytes.name = 'image.jpg'
+        files = {'file': (file_bytes.name, file_bytes, 'image/jpeg')}
         response = requests.post(
-            str(self.settings.host_pose_detector), json=payload,
+            str(self.settings.host_pose_detector), files=files,
         )
 
         return PoseDetectorOutput(

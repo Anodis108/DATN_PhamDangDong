@@ -5,33 +5,38 @@ import unittest
 import cv2
 from common.utils import get_settings
 from fastapi.encoders import jsonable_encoder
-from infrastructure.box_detector import CardDetector
-from infrastructure.box_detector import CardDetectorInput
+from infrastructure.box_detector import BoxDetector
+from infrastructure.box_detector import BoxDetectorInput
 
 
-class TestCardDetector(unittest.TestCase):
+class TestBoxDetector(unittest.TestCase):
     def setUp(self) -> None:
         self.settings = get_settings()
-        self.card_detector = CardDetector(settings=self.settings)
+        self.box_detector = BoxDetector(settings=self.settings)
         self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
 
-    def test_api_card_detection(self):
+    def test_api_box_detection(self):
         test_image = cv2.imread(self.img_path)
         print(
             'Image shape:', test_image,
             'dtype:', test_image.dtype,
         )
 
-        inputs = CardDetectorInput(image=test_image)
-        result = self.card_detector.process(inputs=inputs)
+        inputs = BoxDetectorInput(image=test_image)
+        result = self.box_detector.process(inputs=inputs)
         print(jsonable_encoder(result))
 
         # Kiểm tra kết quả trả về (có thể là bboxes và scores)
-        self.assertIn('bboxes', result.dict())
-        self.assertIn('scores', result.dict())
+        self.assertIn('bboxes', result.model_dump())
+        self.assertIn('scores', result.model_dump())
+
         self.assertIsInstance(result.bboxes, list)
         self.assertIsInstance(result.scores, list)
 
         # Kiểm tra kiểu dữ liệu của scores (phải là danh sách số thực)
         for score in result.scores:
             self.assertIsInstance(score, float)
+
+
+if __name__ == '__main__':
+    unittest.main()
