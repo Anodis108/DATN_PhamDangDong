@@ -129,12 +129,7 @@ async def predict_height(file: UploadFile = File(...)):
             inputs=HeightInput(image=img_array),
         )
 
-        return exception_handler.handle_success(
-            jsonable_encoder({
-                'message': ResponseMessage.SUCCESS,
-                'info': height_result.dict(),
-            }),
-        )
+        return exception_handler.handle_success(jsonable_encoder(height_result))
 
     except Exception as e:
         return exception_handler.handle_exception(
