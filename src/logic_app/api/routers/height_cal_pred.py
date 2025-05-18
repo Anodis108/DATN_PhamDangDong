@@ -125,11 +125,18 @@ async def predict_height(file: UploadFile = File(...)):
             'Running height prediction...',
             extra={'file_name': file.filename},
         )
-        height_result = height_model.process(
-            inputs=HeightInput(image=img_array),
+        height_result = await height_model.process(
+            inputs=HeightInput(
+                image=img_array,
+                img_name=file.filename,
+            ),
         )
-
-        return exception_handler.handle_success(jsonable_encoder(height_result))
+        api_output = HeightOutput(
+            results=height_result.results,
+            out_path=height_result.out_path,
+        )
+        logger.info('Height calculate prediction completed.')
+        return exception_handler.handle_success(jsonable_encoder(api_output))
 
     except Exception as e:
         return exception_handler.handle_exception(

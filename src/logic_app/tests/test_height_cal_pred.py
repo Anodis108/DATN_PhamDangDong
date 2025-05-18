@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import unittest
 
 import cv2
@@ -14,12 +15,18 @@ class TestHeightService(unittest.TestCase):
     def setUp(self) -> None:
         self.settings = get_settings()
         self.height_service = HeightService(settings=self.settings)
-        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
+        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data/processed_data/1_DungThang_Dong_4_170.jpg'
+        self.img_name = os.path.basename(self.img_path)
 
     def test_process_height_service(self):
         test_image = cv2.imread(self.img_path)
-        inputs = HeightInput(image=test_image)
-        result = self.height_service.process(inputs=inputs)
+        inputs = HeightInput(
+            image=test_image,
+            img_name=self.img_path,
+        )
+
+        import asyncio
+        result = asyncio.run(self.height_service.process(inputs=inputs))
 
         # Chuyển đổi kết quả thành JSON hợp lệ và in ra
         json_result = jsonable_encoder(result)

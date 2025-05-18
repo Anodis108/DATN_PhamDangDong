@@ -31,7 +31,6 @@ class CalHeight2D(CalHeight):
             cm_dir, cm_s, diff = self.compare_heights(
                 height=h,
                 distances=dist,
-                px_per_cm=inputs.px_per_cm,
             )
             heights.append(h)
             distances.append(dist)
@@ -110,7 +109,7 @@ class CalHeight2D(CalHeight):
             d_nose_Tophead,
         ]
 
-        return height / px_per_cm, dists
+        return height / px_per_cm, [d / px_per_cm for d in dists]
 
     # khoảng cách giữa 2 điểm
     def cal_distance(self, point1: Tuple[float, float], point2: Tuple[float, float]) -> float:
@@ -138,9 +137,9 @@ class CalHeight2D(CalHeight):
             ) / (line_slope ** 2 + 1) ** 0.5
             return perpendicular_distance
 
-    def compare_heights(self, height: float, distances: List[float], px_per_cm: float) -> Tuple[float, float, float]:
+    def compare_heights(self, height: float, distances: List[float]) -> Tuple[float, float, float]:
         cm_dir = height
-        cm_s = sum(d / px_per_cm for d in distances)
+        cm_s = sum(d for d in distances)
         diff = abs(cm_dir - cm_s)
 
         return cm_dir, cm_s, diff

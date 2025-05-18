@@ -31,7 +31,6 @@ class CalHeight3D(CalHeight):
             cm_dir, cm_s, diff = self.compare_heights(
                 height=h,
                 distances=dist,
-                px_per_cm=inputs.px_per_cm,
             )
             heights.append(h)
             distances.append(dist)
@@ -319,9 +318,9 @@ class CalHeight3D(CalHeight):
         distance = np.linalg.norm(point_vec - nearest * line_len)
         return distance
 
-    def compare_heights(self, height: float, distances: List[float], px_per_cm: float) -> Tuple[float, float, float]:
+    def compare_heights(self, height: float, distances: List[float]) -> Tuple[float, float, float]:
         cm_dir = height
-        cm_s = sum(d / px_per_cm for d in distances)
+        cm_s = sum(d for d in distances)
         diff = abs(cm_dir - cm_s)
 
         return cm_dir, cm_s, diff

@@ -7,4 +7,5 @@ from common.bases import BaseModel
 
 
 class APIOutput(BaseModel):
-    info_text: List[Any]
+    result: List[Any]
+    out_path: str
