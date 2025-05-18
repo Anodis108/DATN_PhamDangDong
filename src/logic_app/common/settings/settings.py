@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from pydantic import HttpUrl
 from pydantic_settings import BaseSettings
 
+from .models import DrawSettings
 from .models import WriteCSVSettings
 
 # test in local
@@ -18,6 +19,7 @@ class Settings(BaseSettings):
     host_height_predictor: HttpUrl
 
     write_csv: WriteCSVSettings
+    draw: DrawSettings
 
     class Config:
         env_nested_delimiter = '__'

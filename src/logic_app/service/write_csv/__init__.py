@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .service2D import CSVWriterInput
-from .service2D import CSVWriterModel
-from .service2D import CSVWriterOutput
+from .service import CSVWriterInput
+from .service import CSVWriterOutput
+from .service import CSVWriterService
 
-__all__ = ['CSVWriter', 'CSVWriterInput', 'CSVWriterOutput']
+__all__ = ['CSVWriterService', 'CSVWriterInput', 'CSVWriterOutput']

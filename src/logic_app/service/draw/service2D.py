@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
 import cv2
-import mediapipe as mp
 import numpy as np
 from common.bases import BaseModel
 from common.bases import BaseService
@@ -20,10 +21,11 @@ logger = get_logger(__name__)
 
 class VisualizationInput(BaseModel):
     image: np.ndarray
-    detection_result: mp.tasks.python.vision.PoseLandmarkerResult
-    height_cm: float
-    bboxes: Optional[np.ndarray] = None
-    confidences: Optional[np.ndarray] = None
+    name_image: str
+    pose_landmarks_list: list[list[dict]]
+    height_cm: list[float]
+    bboxes: np.ndarray
+    confidences: np.ndarray
 
 
 class VisualizationOutput(BaseModel):
@@ -34,29 +36,30 @@ class VisualizationOutput(BaseModel):
 class VisualizationService(BaseService):
     settings: Settings
 
-    def __init__(self, settings: Settings):
-        self.settings = settings
-
-    def _draw_landmarks(self, image: np.ndarray, detection_result: mp.tasks.python.vision.PoseLandmarkerResult) -> np.ndarray:
+    def _draw_landmarks(self, image: np.ndarray, pose_landmarks_list: list[list[dict]]) -> np.ndarray:
         annotated_image = np.copy(image)
-        for pose_landmarks in detection_result.pose_landmarks:
-            pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
-            pose_landmarks_proto.landmark.extend([
-                landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in pose_landmarks
+        for pose_landmarks in pose_landmarks_list:
+            proto = landmark_pb2.NormalizedLandmarkList()
+            proto.landmark.extend([
+                landmark_pb2.NormalizedLandmark(
+                    x=lm['x'], y=lm['y'], z=lm['z'],
+                )
+                for lm in pose_landmarks
             ])
             solutions.drawing_utils.draw_landmarks(
-                annotated_image, pose_landmarks_proto, solutions.pose.POSE_CONNECTIONS,
+                annotated_image, proto, solutions.pose.POSE_CONNECTIONS,
                 solutions.drawing_styles.get_default_pose_landmarks_style(),
             )
         return annotated_image
 
     def process(self, inputs: VisualizationInput) -> VisualizationOutput:
         try:
+            # Vẽ landmarks
             annotated_image = self._draw_landmarks(
-                inputs.image, inputs.detection_result,
+                inputs.image, inputs.pose_landmarks_list,
             )
 
-            # Draw YOLO bounding boxes (if provided)
+            # Vẽ bounding boxes nếu có YOLO
             if inputs.bboxes is not None and inputs.confidences is not None:
                 for box, conf in zip(inputs.bboxes, inputs.confidences):
                     x1, y1, x2, y2 = map(int, box)
@@ -65,51 +68,27 @@ class VisualizationService(BaseService):
                         (x2, y2), (0, 255, 0), 2,
                     )
                     cv2.putText(
-                        annotated_image, f'Black box {conf:.2f}', (
-                            x1, y1 - 10,
-                        ),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2,
+                        annotated_image, f'box {conf:.2f}', (x1, y1 - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1,
                     )
 
-            # Draw height text
-            text = f'Estimated Height: {inputs.height_cm:.2f} cm'
+            # Ghi thông tin chiều cao
+            text = f'Estimated Height: {inputs.height_cm[0]:.2f} cm'
             cv2.putText(
-                annotated_image, text, (0, 50),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1,
+                annotated_image, text, (10, 30),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 0), 2,
             )
 
-            output_path = None
-            if inputs.bboxes is None:  # Image mode
-                from datetime import datetime
-                output_dir = self.settings.get(
-                    'output_dir', '2D_pose3_test/output3',
-                )
-                output_path = f"{output_dir}/final_image_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.jpg"
-                cv2.imwrite(output_path, annotated_image)
+            # Lưu ảnh
+            output_dir = self.settings.draw.output_dir
+            os.makedirs(output_dir, exist_ok=True)
+            output_path = f"{output_dir}/{inputs.name_image}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.jpg"
+            cv2.imwrite(output_path, annotated_image)
 
-                # Resize and display
-                screen_res = (1280, 720)
-                scale = min(
-                    screen_res[0] / annotated_image.shape[1],
-                    screen_res[1] / annotated_image.shape[0],
-                )
-                resized_image = cv2.resize(
-                    annotated_image, (
-                        int(annotated_image.shape[1] * scale),
-                        int(annotated_image.shape[0] * scale),
-                    ),
-                )
-                cv2.putText(
-                    resized_image, text, (0, 50),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1,
-                )
-                cv2.imshow('Final Result', resized_image)
-                cv2.waitKey(10000)
-                cv2.destroyAllWindows()
-            else:  # Camera mode
-                cv2.imshow('Camera Output', annotated_image)
-
-            return VisualizationOutput(annotated_image=annotated_image, output_path=output_path)
+            return VisualizationOutput(
+                annotated_image=annotated_image,
+                output_path=output_path,
+            )
 
         except Exception as e:
             logger.error(f'Visualization failed: {str(e)}')

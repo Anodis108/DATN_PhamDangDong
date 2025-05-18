@@ -14,7 +14,7 @@ class TestPoseDetector(unittest.TestCase):
     def setUp(self) -> None:
         self.settings = get_settings()
         self.pose_detector = PoseDetector(settings=self.settings)
-        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
+        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data/processed_data/1_DungThang_Dong_4_170.jpg'
 
     def test_api_pose_detection(self):
         test_image = cv2.imread(self.img_path)

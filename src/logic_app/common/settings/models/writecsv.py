@@ -9,3 +9,4 @@ class WriteCSVSettings(BaseModel):
     distance3D_path: str
     pose_landmark_path: str
     mode: str  # 2D or 3D
+    active: bool

@@ -23,6 +23,7 @@ class CSVWriterInput(BaseModel):
     distances: Optional[List[List[float]]] = None
     pose_num: int           # số thứ tự tương ứng với pose
     height_truth: float     # height thực
+    height_pre: List[float]
 
 
 class CSVWriterOutput(BaseModel):
@@ -31,7 +32,7 @@ class CSVWriterOutput(BaseModel):
     distances_csv_written: bool = False
 
 
-class CSVWriterModel(BaseService):
+class CSVWriterService(BaseService):
     """Model to write pose landmarks and distances to CSV files."""
     settings: Settings
 
@@ -69,6 +70,7 @@ class CSVWriterModel(BaseService):
                     distances=inputs.distances,
                     csv_filename=csv_mode,
                     height_truth=inputs.height_truth,
+                    height_pre=inputs.height_pre,
                 )
 
             return CSVWriterOutput(
@@ -118,6 +120,7 @@ class CSVWriterModel(BaseService):
         distances: List[List[float]],
         csv_filename: str,
         height_truth: float,
+        height_pre: List[float],
     ) -> bool:
         """Write distances and height to a CSV file."""
         try:
@@ -126,15 +129,16 @@ class CSVWriterModel(BaseService):
                 if csvfile.tell() == 0:
                     writer.writerow(
                         ['Pose'] +
-                        [f'Distance{i + 1} (cm)' for i in range(len(distances))] +
+                        [f'Distance{i + 1} (cm)' for i in range(len(distances[0]))] +
+                        ['Height_Pre (cm)'] +
                         ['Height_truth (cm)'],
                     )
-                for person in distances:
+                for person, pred_height in zip(distances, height_pre):
                     distances_cm = [
                         distance for distance in person
                     ]
                     writer.writerow([pose_num] + distances_cm +
-                                    [height_truth])
+                                    [pred_height] + [height_truth])
             return True
         except Exception as e:
             logger.error(

@@ -4,17 +4,16 @@ import asyncio
 import csv
 import os
 import unittest
-from tempfile import TemporaryDirectory
 
 from common.utils import get_settings
 from service.write_csv import CSVWriterInput
-from service.write_csv import CSVWriterModel
+from service.write_csv import CSVWriterService
 
 
 class TestCSVWriter(unittest.TestCase):
     def setUp(self) -> None:
         self.settings = get_settings()
-        self.model = CSVWriterModel(settings=self.settings)
+        self.model = CSVWriterService(settings=self.settings)
 
         # Dummy landmarks and distances
         self.pose_landmarks_list = [
@@ -69,60 +68,52 @@ class TestCSVWriter(unittest.TestCase):
 
         self.height_truth = 170.5
         self.pose_num = 1
+        self.pre = [186.6]
 
     def test_write_csv_files(self):
-        with TemporaryDirectory() as tmpdir:
-            # Gán lại đường dẫn CSV
-            self.model.settings.write_csv.pose_landmark_path = os.path.join(
-                tmpdir, 'pose_landmarks.csv',
-            )
-            self.model.settings.write_csv.distance2D_path = os.path.join(
-                tmpdir, 'distance_2d.csv',
-            )
-            self.model.settings.write_csv.mode = '2D'
+        # Tạo input
+        inputs = CSVWriterInput(
+            pose_num=self.pose_num,
+            height_truth=self.height_truth,
+            pose_landmarks_list=self.pose_landmarks_list,
+            distances=self.distances,
+            height_pre=self.pre,
+        )
 
-            # Tạo input
-            inputs = CSVWriterInput(
-                pose_num=self.pose_num,
-                height_truth=self.height_truth,
-                pose_landmarks_list=self.pose_landmarks_list,
-                distances=self.distances,
-            )
+        # Gọi model (phải chạy async)
+        output = asyncio.run(self.model.process(inputs=inputs))
 
-            # Gọi model (phải chạy async)
-            output = asyncio.run(self.model.process(inputs=inputs))
+        # === Kiểm tra kết quả trả về ===
+        self.assertTrue(output.landmarks_csv_written)
+        self.assertTrue(output.distances_csv_written)
 
-            # === Kiểm tra kết quả trả về ===
-            self.assertTrue(output.landmarks_csv_written)
-            self.assertTrue(output.distances_csv_written)
+        # === Kiểm tra file tồn tại ===
+        self.assertTrue(
+            os.path.exists(
+                self.model.settings.write_csv.pose_landmark_path,
+            ),
+        )
+        self.assertTrue(
+            os.path.exists(
+                self.model.settings.write_csv.distance2D_path,
+            ),
+        )
 
-            # === Kiểm tra file tồn tại ===
-            self.assertTrue(
-                os.path.exists(
-                    self.model.settings.write_csv.pose_landmark_path,
-                ),
-            )
-            self.assertTrue(
-                os.path.exists(
-                    self.model.settings.write_csv.distance2D_path,
-                ),
-            )
+        # === Đọc file và kiểm tra nội dung landmarks ===
+        print('\n📄 Nội dung pose_landmarks.csv:')
+        with open(self.model.settings.write_csv.pose_landmark_path) as f:
+            rows = list(csv.reader(f))
+            self.assertGreater(len(rows), 1)
+            for row in rows:
+                print(row)
 
-            # === Đọc file và kiểm tra nội dung landmarks ===
-            print('\n📄 Nội dung pose_landmarks.csv:')
-            with open(self.model.settings.write_csv.pose_landmark_path) as f:
-                rows = list(csv.reader(f))
-                self.assertGreater(len(rows), 1)
-                for row in rows:
-                    print(row)
-
-            # === Đọc file và kiểm tra nội dung distances ===
-            print('\n📄 Nội dung distance_2d.csv:')
-            with open(self.model.settings.write_csv.distance2D_path) as f:
-                rows = list(csv.reader(f))
-                self.assertGreater(len(rows), 1)
-                for row in rows:
-                    print(row)
+        # === Đọc file và kiểm tra nội dung distances ===
+        print('\n📄 Nội dung distance_2d.csv:')
+        with open(self.model.settings.write_csv.distance2D_path) as f:
+            rows = list(csv.reader(f))
+            self.assertGreater(len(rows), 1)
+            for row in rows:
+                print(row)
 
 
 if __name__ == '__main__':
