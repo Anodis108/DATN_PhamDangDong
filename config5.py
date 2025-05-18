@@ -8,3 +8,15 @@
 #     'thresh_angle': 15
 # }
 from __future__ import annotations
+
+import os
+from os.path import dirname
+
+
+# pointer to outside of virtual_fence module
+ROOT = dirname(dirname(os.path.abspath(__file__)))
+
+CONFIG_PATH = os.path.join(
+    ROOT, 'resources', 'config',
+    'config.yaml',
+).replace('\\', '/')
