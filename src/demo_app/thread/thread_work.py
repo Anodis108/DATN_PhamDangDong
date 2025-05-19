@@ -8,10 +8,12 @@ import numpy as np
 import openpyxl
 from common.utils import get_settings
 from main_controller.utils import ImageUtils
+from model import BaseResults
 from network.call_api import APICaller
+from PIL import ExifTags
+from PIL import Image
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtCore import QThread
-
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -20,7 +22,7 @@ settings = get_settings()
 
 
 class ThreadWork(QThread):
-    image_processed = pyqtSignal(np.ndarray, str, float, str)
+    image_processed = pyqtSignal(object, str, float, str)
     video_frame_processed = pyqtSignal(np.ndarray)
     error_occurred = pyqtSignal(str)
     finished = pyqtSignal()
@@ -42,28 +44,63 @@ class ThreadWork(QThread):
         self.finished.emit()
 
     def run_image_processing(self):
-        image = cv2.imread(self.image_path)
-        if image is None:
-            self.error_occurred.emit('Failed to load image.')
+        # 📌 1. Đọc ảnh gốc với Pillow và chỉnh orientation
+        try:
+            image_pil = Image.open(self.image_path)
+            # Auto-rotate theo EXIF
+            try:
+                for orientation in ExifTags.TAGS.keys():
+                    if ExifTags.TAGS[orientation] == 'Orientation':
+                        break
+                exif = image_pil._getexif()
+                if exif is not None:
+                    orientation_value = exif.get(orientation, None)
+                    if orientation_value == 3:
+                        image_pil = image_pil.rotate(180, expand=True)
+                    elif orientation_value == 6:
+                        image_pil = image_pil.rotate(270, expand=True)
+                    elif orientation_value == 8:
+                        image_pil = image_pil.rotate(90, expand=True)
+            except Exception as e:
+                print(
+                    f'[Warning] No EXIF orientation or failed to rotate: {e}',
+                )
+        except Exception as e:
+            self.error_occurred.emit(f'Failed to load image: {e}')
             return
 
-        # Chuyển đổi màu
-        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        save_img_path = self.img_utils.save_img(image, settings.app.save_dir)
-        response = self.callapi.call_api(settings.host_height_service, image)
+        # 📌 2. Chuyển đổi sang NumPy để xử lý (cv2 hoặc model inference)
+        image_np = np.array(image_pil.convert('RGB'))  # RGB → ndarray
+        image_bgr = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
 
-        # Lưu dữ liệu vào Excel
+        # 📌 3. Lưu ảnh ban đầu
+        save_img_path = self.img_utils.save_img(
+            image_bgr, settings.app.save_dir,
+        )
+
+        # 📌 4. Gọi API tính chiều cao
+        self.response: BaseResults = self.callapi.call_api(
+            settings.host_height_service, image_bgr, self.image_path,
+        )
+        self.height = max(self.response.heights)
+
+        # 📌 5. Đọc lại ảnh đã xử lý đầu ra bằng Pillow
+        image_pil2 = Image.open(self.response.out_path).convert('RGB')
+
+        # 📌 6. Lưu vào Excel
         self.save_to_excel(
             {
                 'place': 'HaUI',
-                'height': response,
+                'height': self.height,
                 'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                 'image_path': save_img_path,
             }, 'detection_data.xlsx',
         )
 
-        # Phát tín hiệu để cập nhật giao diện
-        self.image_processed.emit(image_rgb, 'HaUI', response, save_img_path)
+        # 📌 7. Emit ảnh (RGB numpy array) cho PyQt
+        self.image_processed.emit(
+            image_pil2, 'HaUI', self.height, self.response.out_path,
+        )
 
     def run_video_stream(self):
         self.video_capture = cv2.VideoCapture(self.image_path)

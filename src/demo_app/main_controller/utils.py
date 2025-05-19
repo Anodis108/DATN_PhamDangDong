@@ -7,11 +7,14 @@ import time
 import cv2
 import numpy as np
 import openpyxl
+from PIL import ExifTags
+from PIL import Image
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QVBoxLayout
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -95,3 +98,30 @@ class ImageUtils:
             # Lưu vào file
             wb.save(file_name)
             logging.info(f'Dữ liệu đã được lưu vào {file_name}')
+
+    @staticmethod
+    def read_image_fix_orientation(path: str) -> np.ndarray:
+        try:
+            image = Image.open(path)
+
+            # Sửa xoay nếu có EXIF
+            try:
+                for orientation in ExifTags.TAGS.keys():
+                    if ExifTags.TAGS[orientation] == 'Orientation':
+                        break
+                exif = image._getexif()
+                if exif is not None:
+                    orientation_value = exif.get(orientation, None)
+                    if orientation_value == 3:
+                        image = image.rotate(180, expand=True)
+                    elif orientation_value == 6:
+                        image = image.rotate(270, expand=True)
+                    elif orientation_value == 8:
+                        image = image.rotate(90, expand=True)
+            except Exception as e:
+                print(f'[WARNING] Cannot correct orientation: {e}')
+
+            return np.array(image.convert('RGB'))
+        except Exception as e:
+            print(f'[ERROR] Failed to read image {path}: {e}')
+            return None

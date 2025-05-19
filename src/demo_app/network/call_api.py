@@ -13,18 +13,18 @@ from model import BaseResults
 class APICaller(BaseModel):
 
     @staticmethod
-    def prepare_image_file(image: np.ndarray):
+    def prepare_image_file(image: np.ndarray, img_path: str):
         """Convert np.ndarray image to file-like object for upload"""
         _, buffer = cv2.imencode('.jpg', image)
         file_bytes = BytesIO(buffer.tobytes())
-        file_bytes.name = 'image.jpg'
+        file_bytes.name = img_path
         return file_bytes
 
     @staticmethod
-    def call_api(api_url: str, data: Union[np.ndarray, BaseModel]) -> dict | None:
+    def call_api(api_url: str, data: Union[np.ndarray, BaseModel], img_path: str) -> dict | None:
         try:
             if isinstance(data, np.ndarray):
-                file_bytes = APICaller.prepare_image_file(data)
+                file_bytes = APICaller.prepare_image_file(data, img_path)
                 files = {'file': (file_bytes.name, file_bytes, 'image/jpeg')}
                 response = requests.post(api_url, files=files)
 
@@ -36,10 +36,9 @@ class APICaller(BaseModel):
 
             response.raise_for_status()
             print('DEBUG response:', response.json())
-            return max(
-                BaseResults(
-                    heights=response.json()['info']['results'],
-                ).heights,
+            return BaseResults(
+                heights=response.json()['info']['results'],
+                out_path=response.json()['info']['out_path'],
             )
 
         except requests.RequestException as e:

@@ -8,3 +8,4 @@ from common.bases import BaseModel
 
 class BaseResults(BaseModel):
     heights: List[float]
+    out_path: str
