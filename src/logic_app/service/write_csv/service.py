@@ -24,6 +24,7 @@ class CSVWriterInput(BaseModel):
     pose_num: int           # số thứ tự tương ứng với pose
     height_truth: float     # height thực
     height_pre: List[float]
+    px_per_cm: float        # số pixel tương ứng với 1 cm
 
 
 class CSVWriterOutput(BaseModel):
@@ -71,6 +72,7 @@ class CSVWriterService(BaseService):
                     csv_filename=csv_mode,
                     height_truth=inputs.height_truth,
                     height_pre=inputs.height_pre,
+                    px_per_cm=inputs.px_per_cm,
                 )
 
             return CSVWriterOutput(
@@ -121,6 +123,7 @@ class CSVWriterService(BaseService):
         csv_filename: str,
         height_truth: float,
         height_pre: List[float],
+        px_per_cm: float,
     ) -> bool:
         """Write distances and height to a CSV file."""
         try:
@@ -131,6 +134,7 @@ class CSVWriterService(BaseService):
                         ['Pose'] +
                         [f'Distance{i + 1} (cm)' for i in range(len(distances[0]))] +
                         ['Height_Pre (cm)'] +
+                        ['px_per_cm'] +
                         ['Height_truth (cm)'],
                     )
                 for person, pred_height in zip(distances, height_pre):
@@ -138,7 +142,7 @@ class CSVWriterService(BaseService):
                         distance for distance in person
                     ]
                     writer.writerow([pose_num] + distances_cm +
-                                    [pred_height] + [height_truth])
+                                    [pred_height] + [px_per_cm] + [height_truth])
             return True
         except Exception as e:
             logger.error(

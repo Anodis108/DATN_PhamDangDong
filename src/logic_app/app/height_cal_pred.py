@@ -129,6 +129,7 @@ class HeightService(BaseService):
                     pose_landmarks_list=pose_det_out.pose_landmarks,
                     pose_num=pose_num,
                     height_pre=height_pre,
+                    px_per_cm=box_det_out.pixel_per_cm,
                 ),
             )
             logger.info(
