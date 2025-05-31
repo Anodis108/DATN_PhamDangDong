@@ -145,7 +145,7 @@ async def cal_height(inputs: APIInput = Body(...)):
             diffs=response.diffs,
         )
 
-        logger.info('Cal Height processing completed successfully.')
+        # logger.info('Cal Height processing completed successfully.')
         return exception_handler.handle_success(jsonable_encoder(api_output))
 
     except Exception as e:

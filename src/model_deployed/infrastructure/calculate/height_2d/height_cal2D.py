@@ -108,6 +108,9 @@ class CalHeight2D(CalHeight):
             d_nose_mouth,
             d_nose_Tophead,
         ]
+        logger.info(f'✅ pixcel per cm {px_per_cm}')
+        logger.info(f'height {height}')
+        logger.info(f'✅ distance {dists}')
 
         return height / px_per_cm, [d / px_per_cm for d in dists]
 

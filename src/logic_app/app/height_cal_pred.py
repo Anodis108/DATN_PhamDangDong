@@ -129,6 +129,7 @@ class HeightService(BaseService):
                     pose_landmarks_list=pose_det_out.pose_landmarks,
                     pose_num=pose_num,
                     height_pre=height_pre,
+                    px_per_cm=box_det_out.pixel_per_cm,
                 ),
             )
             logger.info(
@@ -141,6 +142,7 @@ class HeightService(BaseService):
         except Exception as e:
             logger.exception('Error during Write csv.')
             raise e
+        logger.info(f'✅ pixcel per cm {box_det_out.pixel_per_cm}')
         # # Step 4: Predict Height
         # try:
         #     height_pred_out = self._get_height_pred.process(
@@ -163,7 +165,8 @@ class HeightService(BaseService):
         Trích xuất pose_num và height_truth từ tên file, ví dụ:
         '1_DungThang_Base_1_170.jpg' → (pose_num=1, height_truth=170.0)
         """
-        name_no_ext = Path(img_name).stem  # loại bỏ .jpg
+        name_image = Path(img_name).stem
+        name_no_ext = Path(name_image).stem  # loại bỏ .jpg
         parts = name_no_ext.split('_')
 
         try:

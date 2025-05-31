@@ -7,6 +7,7 @@ from queue import Queue
 
 import numpy as np
 from common.utils import get_settings
+from PIL import Image
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
@@ -172,15 +173,22 @@ class MainWindow(QtWidgets.QMainWindow):
         if mode == 'push':
             for i in range(3, 0, -1):
                 label_img_results[i].clear()
-                if label_img_results[i-1].pixmap() is not None:
+                if label_img_results[i - 1].pixmap() is not None:
                     label_img_results[i].setPixmap(
-                        label_img_results[i-1].pixmap().copy(),
+                        label_img_results[i - 1].pixmap().copy(),
                     )
-                label_img_results[i].setPixmap(label_img_results[i-1].pixmap())
-                label_time_results[i].setText(label_time_results[i-1].text())
-                label_place_results[i].setText(label_place_results[i-1].text())
+
+                # 🔧 Copy img_path của label trước đó
+                prev_path = label_img_results[i - 1].property('img_path')
+                if prev_path:
+                    label_img_results[i].setProperty('img_path', prev_path)
+
+                label_time_results[i].setText(label_time_results[i - 1].text())
+                label_place_results[i].setText(
+                    label_place_results[i - 1].text(),
+                )
                 label_height_results[i].setText(
-                    label_height_results[i-1].text(),
+                    label_height_results[i - 1].text(),
                 )
         elif mode == 'clear':
             for i in range(4):
@@ -194,13 +202,26 @@ class MainWindow(QtWidgets.QMainWindow):
             label.setAlignment(Qt.AlignCenter)
             label.installEventFilter(self)
 
-    def display_image_on_label(self, ui_label: QLabel, image: np.ndarray):
-        pixmap = QtGui.QImage(
-            image.data, image.shape[1], image.shape[0], QtGui.QImage.Format_RGB888,
+    def display_image_on_label(self, ui_label: QLabel, image: Image.Image):
+        """Hiển thị ảnh PIL.Image lên QLabel sau khi convert sang RGB."""
+        # Đảm bảo ảnh ở định dạng RGB
+        image = image.convert('RGB')
+
+        # Convert PIL → NumPy
+        image_np = np.array(image)
+
+        # Tạo QImage từ NumPy
+        height, width, channel = image_np.shape
+        bytes_per_line = 3 * width
+        qimage = QtGui.QImage(
+            image_np.data, width, height,
+            bytes_per_line, QtGui.QImage.Format_RGB888,
         )
+
+        # Hiển thị lên QLabel
         ui_label.clear()
         ui_label.setScaledContents(True)
-        ui_label.setPixmap(QtGui.QPixmap.fromImage(pixmap))
+        ui_label.setPixmap(QtGui.QPixmap.fromImage(qimage))
 
     def eventFilter(self, obj: QObject, event: QEvent) -> bool:
         if isinstance(obj, QLabel) and event.type() == QEvent.MouseButtonPress and event.button() == Qt.LeftButton:
