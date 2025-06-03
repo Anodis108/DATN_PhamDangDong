@@ -14,6 +14,8 @@ from infrastructure.height_calculator import HeightCalInput
 from infrastructure.height_predictor import HeightPred
 from infrastructure.pose_detector import PoseDetector
 from infrastructure.pose_detector import PoseDetectorInput
+from infrastructure.height_predictor import HeightPredInput
+from infrastructure.height_predictor import HeightPred
 from service.draw import VisualizationInput
 from service.draw import VisualizationService
 from service.write_csv import CSVWriterInput
@@ -143,22 +145,25 @@ class HeightService(BaseService):
             logger.exception('Error during Write csv.')
             raise e
         logger.info(f'✅ pixcel per cm {box_det_out.pixel_per_cm}')
-        # # Step 4: Predict Height
-        # try:
-        #     height_pred_out = self._get_height_pred.process(
-        #         inputs=HeightPredInput(x=height_cal_out.distances),
-        #     )
-        #     logger.info('Height prediction completed successfully.')
-        # except Exception as e:
-        #     logger.exception('Error during Height prediction.')
-        #     raise e
-
-        # return HeightOutput(results=height_pred_out.pred)
+        # Step 4: Predict Height
+        try:
+            height_pred_out = self._get_height_pred.process(
+                inputs=HeightPredInput(x=height_cal_out.distances),
+            )
+            logger.info('Height prediction completed successfully.')
+        except Exception as e:
+            logger.exception('Error during Height prediction.')
+            raise e
 
         return HeightOutput(
-            results=height_cal_out.heights,
+            results=height_pred_out.pred,
             out_path=draw_out.output_path,
         )
+
+        # return HeightOutput(
+        #     results=height_cal_out.heights,
+        #     out_path=draw_out.output_path,
+        # )
 
     def parse_height_input_from_img_name(self, img_name: str) -> tuple[int, float, str]:
         """

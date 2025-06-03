@@ -24,7 +24,7 @@ class HeightPredictorModel(BaseService, ABC):
     settings: Settings
 
     @abstractmethod
-    async def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
+    def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
         ...
 
     @classmethod

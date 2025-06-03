@@ -9,7 +9,7 @@ import requests  # type: ignore
 
 class TestPoseDetectorAPI(unittest.TestCase):
     def setUp(self) -> None:
-        self.image_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
+        self.image_path = '/mnt/d/project/DATN/DATN_PhamDangDong/resource/data/data_test/z6194149941298_733dfe9d1f76e5f775c0f9336c4b3f3e.jpg'
         self.api_url = 'http://localhost:5000/v1/pose_detector'
 
         if not os.path.exists(self.image_path):

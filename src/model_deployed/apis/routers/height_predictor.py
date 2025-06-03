@@ -107,7 +107,7 @@ async def height_pre(inputs: APIInput = Body(...)):
 
     # --- Predict ---
     try:
-        response = await height_pre_model.process(
+        response = height_pre_model.process(
             inputs=HeightPredictorModelInput(x=inputs.x),
         )
         api_output = APIOutput(pred=response.pred)
