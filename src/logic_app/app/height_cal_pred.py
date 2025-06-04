@@ -148,7 +148,7 @@ class HeightService(BaseService):
         # Step 4: Predict Height
         try:
             height_pred_out = self._get_height_pred.process(
-                inputs=HeightPredInput(x=height_cal_out.distances),
+                inputs=HeightPredInput(x=[d[:6] for d in height_cal_out.distances]),
             )
             logger.info('Height prediction completed successfully.')
         except Exception as e:

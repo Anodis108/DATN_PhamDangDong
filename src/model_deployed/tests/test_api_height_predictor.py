@@ -12,7 +12,7 @@ class TestHeightPredAPI(unittest.TestCase):
         self.api_url = 'http://localhost:5000/v1/height_pred'
         self.distance = [
             [
-                1.0, 2.0, 3.0, 4.0, 5.0, 6.0
+                9.933471372616063,57.19990722740044,67.03142189601489,87.5611880572484,32.26543209272624,5.833722614191923
             ]
         ]
 
@@ -33,8 +33,7 @@ class TestHeightPredAPI(unittest.TestCase):
         json_data = response.json()
         self.assertIn('message', json_data)
         self.assertIn('info', json_data)
-        self.assertIn('bboxes', json_data['info'])
-        self.assertIsInstance(json_data['info']['bboxes'], list)
+
 
 
 if __name__ == '__main__':

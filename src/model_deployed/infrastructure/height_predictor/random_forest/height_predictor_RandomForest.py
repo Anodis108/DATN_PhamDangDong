@@ -21,10 +21,8 @@ class HeightPredictorModelRandomForest(HeightPredictorModel):
 
     @cached_property
     def model_loaded(self) -> RandomForestRegressor:
-        return self.load_model(self.settings.height_predictor.model_path_random_forest)
+        return joblib.load(self.settings.height_predictor.model_path_random_forest)
 
-    def load_model(self, model_path: str) -> RandomForestRegressor:
-        return joblib.load(model_path)
 
     def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
         pred = self.forward(inputs.x)

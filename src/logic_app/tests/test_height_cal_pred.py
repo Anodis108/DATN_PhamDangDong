@@ -15,7 +15,7 @@ class TestHeightService(unittest.TestCase):
     def setUp(self) -> None:
         self.settings = get_settings()
         self.height_service = HeightService(settings=self.settings)
-        self.img_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data/processed_data/1_DungThang_Dong_4_170.jpg'
+        self.img_path = '/mnt/d/project/DATN/DATN_PhamDangDong/resource/data/data/processed_data/1_DungThang_PhamNgocThach_5_183.jpg'
         self.img_name = os.path.basename(self.img_path)
 
     def test_process_height_service(self):
