@@ -30,7 +30,7 @@ class VisualizationInput(BaseModel):
 
 class VisualizationOutput(BaseModel):
     annotated_image: np.ndarray
-    output_path: Optional[str] = None
+    output_path: str
 
 
 class VisualizationService(BaseService):

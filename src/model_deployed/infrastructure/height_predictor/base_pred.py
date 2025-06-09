@@ -24,7 +24,7 @@ class HeightPredictorModel(BaseService, ABC):
     settings: Settings
 
     @abstractmethod
-    async def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
+    def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
         ...
 
     @classmethod
@@ -36,5 +36,11 @@ class HeightPredictorModel(BaseService, ABC):
         elif mode == 'RANDOM_FOREST':
             from .random_forest import HeightPredictorModelRandomForest
             return HeightPredictorModelRandomForest(settings=settings)
+        elif mode == 'HEIGHT_NET':
+            from .height_net import HeightPredictorModelNN
+            return HeightPredictorModelNN(settings=settings)
+        elif mode == 'LINEAR_TORCH':
+            from .linear_reg_torch import HeightPredictorModelLinearTorch
+            return HeightPredictorModelLinearTorch(settings=settings)
         else:
             raise ValueError(f'Unknown mode: {mode}')

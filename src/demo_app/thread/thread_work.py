@@ -163,3 +163,4 @@ class ThreadWork(QThread):
             self.video_capture.release()
         self.quit()
         self.wait()
+

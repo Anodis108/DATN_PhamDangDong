@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 WORKDIR /app
 
-COPY checkin/requirements.txt .
+COPY logic_app/requirements.txt .
 
 # Upgrade pip
 RUN pip install --upgrade pip

@@ -138,9 +138,7 @@ class CSVWriterService(BaseService):
                         ['Height_truth (cm)'],
                     )
                 for person, pred_height in zip(distances, height_pre):
-                    distances_cm = [
-                        distance for distance in person
-                    ]
+                    distances_cm = list(person)
                     writer.writerow([pose_num] + distances_cm +
                                     [pred_height] + [px_per_cm] + [height_truth])
             return True

@@ -21,12 +21,9 @@ class HeightPredictorModelLinear(HeightPredictorModel):
 
     @cached_property
     def model_loaded(self) -> LinearRegression:
-        return self.load_model(self.settings.height_predictor.model_path_linear)
+        return joblib.load(self.settings.height_predictor.model_path_linear)
 
-    def load_model(self, model_path: str) -> LinearRegression:
-        return joblib.load(model_path)
-
-    async def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
+    def process(self, inputs: HeightPredictorModelInput) -> HeightPredictorModelOutput:
         pred = self.forward(inputs.x)
         return HeightPredictorModelOutput(pred=pred)
 

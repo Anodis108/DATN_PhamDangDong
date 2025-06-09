@@ -69,6 +69,7 @@ class TestCSVWriter(unittest.TestCase):
         self.height_truth = 170.5
         self.pose_num = 1
         self.pre = [186.6]
+        self.px_per_cm = 3.835972520171619
 
     def test_write_csv_files(self):
         # Tạo input
@@ -78,6 +79,7 @@ class TestCSVWriter(unittest.TestCase):
             pose_landmarks_list=self.pose_landmarks_list,
             distances=self.distances,
             height_pre=self.pre,
+            px_per_cm=self.px_per_cm,
         )
 
         # Gọi model (phải chạy async)
@@ -102,18 +104,17 @@ class TestCSVWriter(unittest.TestCase):
         # === Đọc file và kiểm tra nội dung landmarks ===
         print('\n📄 Nội dung pose_landmarks.csv:')
         with open(self.model.settings.write_csv.pose_landmark_path) as f:
-            rows = list(csv.reader(f))
-            self.assertGreater(len(rows), 1)
-            for row in rows:
-                print(row)
-
+            self._extracted_from_test_write_csv_files_34(f)
         # === Đọc file và kiểm tra nội dung distances ===
         print('\n📄 Nội dung distance_2d.csv:')
         with open(self.model.settings.write_csv.distance2D_path) as f:
-            rows = list(csv.reader(f))
-            self.assertGreater(len(rows), 1)
-            for row in rows:
-                print(row)
+            self._extracted_from_test_write_csv_files_34(f)
+
+    def _extracted_from_test_write_csv_files_34(self, f):
+        rows = list(csv.reader(f))
+        self.assertGreater(len(rows), 1)
+        for row in rows:
+            print(row)
 
 
 if __name__ == '__main__':

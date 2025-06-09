@@ -17,7 +17,7 @@ class TestVisualizationService(unittest.TestCase):
         self.visualizer = VisualizationService(settings=self.settings)
 
         # Đường dẫn ảnh mẫu
-        self.image_path = '/home/anodi108/Desktop/project/Do_An_Tot_Nghiep/DATN_PhamDangDong/DATN_PhamDangDong/resource/data/data/processed_data/1_DungThang_Dong_4_170.jpg'
+        self.image_path = '/mnt/d/project/DATN/DATN_PhamDangDong/resource/data/data/processed_data/1_DungThang_PhamNgocThach_5_183.jpg'
         self.image = cv2.imread(self.image_path)
         self.name_image = Path(self.image_path).stem
 
