@@ -1,2 +1,0 @@
-Model,MAE_Test,MSE_Test,RMSE_Test,R2_Test,Best_Val_RMSE,Last_Model_Path,Best_Model_Path
-HeightNet,18.405353546142578,361.4200439453125,19.011050574476744,-8.064535140991211,18.154968321532795,/mnt/d/project/DATN/DATN_PhamDangDong/resource/data/model/model_train/HeightNet_last.pt,/mnt/d/project/DATN/DATN_PhamDangDong/resource/data/model/model_train/HeightNet_best.pt
